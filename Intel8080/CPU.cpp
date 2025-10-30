@@ -38,6 +38,27 @@ CPU::CPU()
 	Sign = Zero = AuxCarry = Parity = Carry = false;
 }
 
+CPU::CPU(const CPU& c)
+	: mem(std::make_unique<std::array<uint8_t, 65536>>(*c.mem)) {
+	pc = c.pc;
+	sp = c.sp;
+	in = c.in;
+	out = c.out;
+	cycles = c.cycles;
+	B = c.B;
+	C = c.C;
+	D = c.D;
+	E = c.E;
+	H = c.H;
+	L = c.L;
+	A = c.A;
+	Sign = c.Sign;
+	Zero = c.Zero;
+	AuxCarry = c.AuxCarry;
+	Parity = c.Parity;
+	Carry = c.Carry;
+}
+
 // Initialise the CPU
 void CPU::init() {
 	pc = 0;

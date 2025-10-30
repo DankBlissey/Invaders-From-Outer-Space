@@ -8,6 +8,7 @@
 class CPU {
 	public:
 		CPU();
+		CPU(const CPU&);
 		void init();
 		void clearMem();
 		uint8_t readMem(uint16_t);
@@ -347,7 +348,7 @@ class CPU {
 		uint8_t B, C, D, E, H, L, A;	// General purpose registers
 		bool Sign, Zero, AuxCarry, 
 			Parity, Carry;				// Flags
-		uint8_t in[256];				// Input
-		uint8_t out[256];				// Output
+		std::array<uint8_t, 256> in;	// input
+		std::array<uint8_t, 256> out;	// Output
 };
 #endif
