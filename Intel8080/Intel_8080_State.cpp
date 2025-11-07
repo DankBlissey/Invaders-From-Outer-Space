@@ -1,9 +1,9 @@
 #include "CPU.h"
-#include <optional>
+#include "StateHelper.h"
 
 struct Intel_8080_State {
 	std::optional<uint16_t> pc, sp;
-	std::optional<std::unique_ptr<std::array<uint8_t, 65536>>> mem;
+	//std::optional<std::unique_ptr<std::array<uint8_t, 65536>>> mem;
 	std::optional<unsigned long> cycles;
 	std::optional<uint8_t> B, C, D, E, H, L, A;
 	std::optional<bool> Sign, Zero, AuxCarry, Parity, Carry;
@@ -11,7 +11,7 @@ struct Intel_8080_State {
 
 	Intel_8080_State& with_pc(uint16_t in) { pc = in; return *this; }
 	Intel_8080_State& with_sp(uint16_t in) { sp = in; return *this; }
-	Intel_8080_State& with_mem(std::array<uint8_t, 65536> in) { mem = std::make_unique < std::array<uint8_t, 65536>>(in); return *this; }
+	//Intel_8080_State& with_mem(std::array<uint8_t, 65536> in) { mem = std::make_unique < std::array<uint8_t, 65536>>(in); return *this; }
 	Intel_8080_State& with_cycles(unsigned long in) { cycles = in; return *this; }
 	Intel_8080_State& with_B(uint8_t in) { B = in; return *this; }
 	Intel_8080_State& with_C(uint8_t in) { C = in; return *this; }
@@ -28,11 +28,25 @@ struct Intel_8080_State {
 	Intel_8080_State& with_in(std::array<uint8_t, 256> ind) { in = ind; return *this; }
 	Intel_8080_State& with_out(std::array<uint8_t, 256> in) { out = in; return *this; }
 
-	bool equals(CPU& cpu) const {
-		if (pc && cpu.pc != *pc) return false;
-		if (sp && cpu.sp != *sp) return false;
-		if (cycles && cpu.cycles != *cycles) return false;
-		if (B && cpu.getB() != *B) return false;
-		return true;
+	
+
+	bool stateEquals(const CPU& cpu) const {
+		return state::matches(pc, cpu.pc)
+			&& state::matches(sp, cpu.sp)
+			&& state::matches(cycles, cpu.cycles)
+			&& state::matches(B, cpu.B)
+			&& state::matches(C, cpu.C)
+			&& state::matches(D, cpu.D)
+			&& state::matches(E, cpu.E)
+			&& state::matches(H, cpu.H)
+			&& state::matches(L, cpu.L)
+			&& state::matches(A, cpu.A)
+			&& state::matches(Sign, cpu.Sign)
+			&& state::matches(Zero, cpu.Zero)
+			&& state::matches(AuxCarry, cpu.AuxCarry)
+			&& state::matches(Parity, cpu.Parity)
+			&& state::matches(Carry, cpu.Carry)
+			&& state::matches(in, cpu.in)
+			&& state::matches(out, cpu.out);
 	}
 };
