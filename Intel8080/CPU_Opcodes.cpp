@@ -145,7 +145,7 @@ void CPU::daa() {
 	if ((A & 0x0F) > 9 || AuxCarry) {
 		uint8_t oldA{ A };
 		A += 0x06;
-		AuxCarry = calculateCarryADD(oldA, 0x06);
+		AuxCarry = calculateAuxCarryADD(oldA, 0x06);
 	}
 	if ((A & 0xF0) > 0x90 || Carry) {
 		uint8_t oldA{ A };

@@ -205,3 +205,44 @@ TEST_CASE("DCR Decrement Register or Memory (flags)", "[opcodes, singleRegInstru
         REQUIRE(testCpu.getAuxCarry() == true);
     }
 }
+
+TEST_CASE("CMA Complement Accumulator", "[opcodes, singleRegInstructions]") {
+    testCpu.init();
+    testCpu.writeMem(0x000, 0x2F); // CMA
+    SECTION("Case 1:") {
+        testCpu.setA(0b01001101);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0b10110010);
+    }
+    SECTION("Case 2:") {
+        testCpu.setA(0b10010111);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0b01101000);
+    }
+}
+
+TEST_CASE("DAA Decimal Adjust Accumulator", "[opcodes, singleRegInstructions]") {
+    testCpu.init();
+    testCpu.writeMem(0x000, 0x27);
+    SECTION("Case: 1, Provided in 8080 manual") {
+        testCpu.setA(0x9B);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 1);
+        REQUIRE(testCpu.getCarry() == true);
+        REQUIRE(testCpu.getAuxCarry() == true);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getParity() == false);
+    }
+    SECTION("Case: 2") {
+        testCpu.setA(1);
+        testCpu.setAuxCarry(true);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 7);
+        REQUIRE(testCpu.getCarry() == false);
+        REQUIRE(testCpu.getAuxCarry() == false);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getParity() == false);
+    }
+}
