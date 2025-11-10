@@ -219,6 +219,11 @@ TEST_CASE("CMA Complement Accumulator", "[opcodes, singleRegInstructions]") {
         testCpu.cycle();
         REQUIRE(testCpu.getA() == 0b01101000);
     }
+    SECTION("Case 3:") {
+        testCpu.setA(0b11111111);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0b00000000);
+    }
 }
 
 TEST_CASE("DAA Decimal Adjust Accumulator", "[opcodes, singleRegInstructions]") {
@@ -242,6 +247,26 @@ TEST_CASE("DAA Decimal Adjust Accumulator", "[opcodes, singleRegInstructions]") 
         REQUIRE(testCpu.getCarry() == false);
         REQUIRE(testCpu.getAuxCarry() == false);
         REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getParity() == false);
+    }
+    SECTION("Case: 3") {
+        testCpu.setA(0b00110101);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 53);
+        REQUIRE(testCpu.getCarry() == false);
+        REQUIRE(testCpu.getAuxCarry() == false);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getParity() == true);
+    }
+    SECTION("Case: 4") {
+        testCpu.setA(0b01111101);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0b10000011);
+        REQUIRE(testCpu.getCarry() == false);
+        REQUIRE(testCpu.getAuxCarry() == true);
+        REQUIRE(testCpu.getSign() == true);
         REQUIRE(testCpu.getZero() == false);
         REQUIRE(testCpu.getParity() == false);
     }
