@@ -112,4 +112,96 @@ TEST_CASE("INR Increment Register or Memory (flags)", "[opcodes, singleRegInstru
         REQUIRE(testCpu.getAuxCarry() == true);
         REQUIRE(testCpu.getCarry() == false);
     }
+    SECTION("Case 2: 79 -> 80") {
+        testCpu.setB(79);
+        testCpu.cycle();
+        REQUIRE(testCpu.getB() == 80);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getParity() == true);
+        REQUIRE(testCpu.getAuxCarry() == true);
+    }
+    SECTION("Case 3: 78 -> 79") {
+        testCpu.setB(78);
+        testCpu.cycle();
+        REQUIRE(testCpu.getB() == 79);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getParity() == false);
+        REQUIRE(testCpu.getAuxCarry() == false);
+    }
+    SECTION("Case 4: 127 -> -128") {
+        testCpu.setB(127);
+        testCpu.cycle();
+        int8_t minus = -128;
+        REQUIRE(testCpu.getB() == std::bit_cast<uint8_t>(minus));
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getSign() == true);
+        REQUIRE(testCpu.getParity() == false);
+        REQUIRE(testCpu.getAuxCarry() == true);
+        REQUIRE(testCpu.getCarry() == false);
+    }
+}
+
+TEST_CASE("DCR Decrement Register or Memory (values)", "[opcodes, singleRegInstructions, values]") {
+    testCpu.init();
+    SECTION("DCR on basic registers") {
+        testCpu.writeMem(0x000, 0x05); // DCRB
+        testCpu.writeMem(0x001, 0x0D); // DCRC
+        testCpu.writeMem(0x002, 0x15); // DCRD
+        testCpu.writeMem(0x003, 0x1D); // DCRE
+        testCpu.writeMem(0x004, 0x25); // DCRH
+        testCpu.writeMem(0x005, 0x2D); // DCRL
+        testCpu.writeMem(0x006, 0x3D); // DCRA
+        SECTION("DCR correctly decrements on all registers") {
+            testCpu.setAllReg(34);
+            for (int i = 0; i < 7; i++) {
+                testCpu.cycle();
+            }
+            REQUIRE(Intel_8080_State().with_B(33).with_C(33).with_D(33).with_E(33).with_H(33).with_L(33).with_A(33).stateEquals(testCpu));
+        }
+    }
+    SECTION("DCR on memory") {
+        testCpu.writeMem(0x00,0x35); // DCRM
+        testCpu.setH(0x3A);
+        testCpu.setL(0x7C);
+        SECTION("DCR correctly decrements a memory value") {
+            testCpu.writeMem(0x3A7C, 34);
+            testCpu.cycle();
+            REQUIRE(testCpu.readMem(0x3A7C) == 33);
+        }
+    }
+}
+
+TEST_CASE("DCR Decrement Register or Memory (flags)", "[opcodes, singleRegInstructions, flags]") {
+    testCpu.init();
+    testCpu.writeMem(0x000, 0x05); // DCRB
+    SECTION("Case 1: 80 -> 79") {
+        testCpu.setB(80);
+        testCpu.cycle();
+        REQUIRE(testCpu.getB() == 79);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getParity() == false);
+        REQUIRE(testCpu.getAuxCarry() == true);
+    }
+    SECTION("Case 2: 1 -> 0") {
+        testCpu.setB(1);
+        testCpu.cycle();
+        REQUIRE(testCpu.getB() == 0);
+        REQUIRE(testCpu.getZero() == true);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getParity() == true);
+        REQUIRE(testCpu.getAuxCarry() == false);
+    }
+    SECTION("Case 3: 0 -> -1") {
+        testCpu.setB(0);
+        testCpu.cycle();
+        int8_t minus = -1;
+        REQUIRE(testCpu.getB() == std::bit_cast<uint8_t>(minus));
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getSign() == true);
+        REQUIRE(testCpu.getParity() == true);
+        REQUIRE(testCpu.getAuxCarry() == true);
+    }
 }
