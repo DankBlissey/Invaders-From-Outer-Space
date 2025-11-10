@@ -271,3 +271,29 @@ TEST_CASE("DAA Decimal Adjust Accumulator", "[opcodes, singleRegInstructions]") 
         REQUIRE(testCpu.getParity() == false);
     }
 }
+
+TEST_CASE("MOV Move data from one register to another", "[opcodes, singleRegInstructions]") {
+    testCpu.init();
+    SECTION("Copy value across all registers") {
+        uint8_t testValue = 0x3D;
+        testCpu.setB(testValue);
+        testCpu.writeMem(0x000, 0x48); // MOV CB
+        testCpu.writeMem(0x001, 0x51); // MOV DC
+        testCpu.writeMem(0x002, 0x5A); // MOV ED
+        testCpu.writeMem(0x003, 0x63); // MOV HE
+        testCpu.writeMem(0x004, 0x6C); // MOV LH
+        testCpu.writeMem(0x005, 0x7D); // MOV AL
+        for (int i = 0; i < 6; i++) {
+            testCpu.cycle();
+        }
+        REQUIRE(Intel_8080_State().with_B(testValue).with_C(testValue).with_D(testValue).with_E(testValue).with_H(testValue).with_L(testValue).with_A(testValue).stateEquals(testCpu));
+    }
+    SECTION("Copy from register to mem") {
+        testCpu.setB(0x3D);
+        testCpu.setH(0x4F);
+        testCpu.setL(0x01);
+        testCpu.writeMem(0x000, 0x70); // MOV MB
+        testCpu.cycle();
+        REQUIRE(testCpu.readMem(0x4F01) == 0x3D);
+    }
+}
