@@ -272,7 +272,7 @@ TEST_CASE("DAA Decimal Adjust Accumulator", "[opcodes, singleRegInstructions]") 
     }
 }
 
-TEST_CASE("MOV Move data from one register to another", "[opcodes, singleRegInstructions]") {
+TEST_CASE("MOV Move data from one register or memory location to another", "[opcodes, singleRegInstructions]") {
     testCpu.init();
     SECTION("Copy value across all registers") {
         uint8_t testValue = 0x3D;
@@ -295,5 +295,14 @@ TEST_CASE("MOV Move data from one register to another", "[opcodes, singleRegInst
         testCpu.writeMem(0x000, 0x70); // MOV MB
         testCpu.cycle();
         REQUIRE(testCpu.readMem(0x4F01) == 0x3D);
+    }
+    SECTION("Copy from mem to register") {
+        testCpu.setE(0x3D);
+        testCpu.setH(0x5A);
+        testCpu.setL(0xFF);
+        testCpu.writeMem(0x5AFF, 0x20);
+        testCpu.writeMem(0x000, 0x5E); // MOV EM
+        testCpu.cycle();
+        REQUIRE(testCpu.getE() == 0x20);
     }
 }
