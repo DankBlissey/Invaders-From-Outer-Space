@@ -160,14 +160,6 @@ uint16_t CPU::stackPop() {
 	return ((*mem)[sp] << 8) | (*mem)[sp + 1];
 }
 
-
-void CPU::status() {
-	// Print the status of the CPU registers and flags
-	printf("PC: %04X SP: %04X A: %02X B: %02X C: %02X D: %02X E: %02X H: %02X L: %02X\n", pc, sp, A, B, C, D, E, H, L);
-	printf("Flags - S: %d Z: %d AC: %d P: %d CY: %d\n", Sign, Zero, AuxCarry, Parity, Carry);
-	printf("Cycles: %lu\n", cycles);
-}
-
 auto CPU::tiedRegisters() const { return std::tie(pc, sp, cycles, B, C, D, E, H, L, A, Sign, Zero, AuxCarry, Parity, Carry); }
 
 bool CPU::operator==(CPU const& rhs) const { 
