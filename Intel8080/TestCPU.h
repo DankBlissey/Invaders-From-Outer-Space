@@ -1,6 +1,5 @@
 #pragma once
 #include "CPU.h"
-#include <cstdint>
 
 class TestCPU: public CPU {
     public:

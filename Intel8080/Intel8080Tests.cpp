@@ -1,7 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include "Intel_8080_State.h"
 #include <bit>
-#include <cstdint>
 
 TestCPU testCpu = TestCPU();
 

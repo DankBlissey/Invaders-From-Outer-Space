@@ -1,6 +1,6 @@
-#include <stdint.h>
+#include <cstdint>
 // Number of cycles for each opcode, important for timing
-static const uint8_t opcodeCycles[256]{
+static const std::uint8_t opcodeCycles[256]{
     //  0  1   2   3   4   5   6   7   8  9   A   B   C   D   E  F
         4, 10, 7,  5,  5,  5,  7,  4,  4, 10, 7,  5,  5,  5,  7, 4,  // 0
         4, 10, 7,  5,  5,  5,  7,  4,  4, 10, 7,  5,  5,  5,  7, 4,  // 1
@@ -21,7 +21,7 @@ static const uint8_t opcodeCycles[256]{
 };
 
 // Number of cycles for each opcode with changes to variable timings
-static const uint8_t opcodeCyclesActionTaken[256]{
+static const std::uint8_t opcodeCyclesActionTaken[256]{
     //  0  1   2   3   4   5   6   7   8  9   A   B   C   D   E  F
         4, 10, 7,  5,  5,  5,  7,  4,  4, 10, 7,  5,  5,  5,  7, 4,  // 0
         4, 10, 7,  5,  5,  5,  7,  4,  4, 10, 7,  5,  5,  5,  7, 4,  // 1
