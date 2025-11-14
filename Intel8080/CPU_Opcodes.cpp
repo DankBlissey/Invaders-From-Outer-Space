@@ -7,7 +7,6 @@ static bool checkSign(uint8_t value) {
 	return (value & 0x80) != 0;
 }
 
-
 // Checks the number of 1 bits in a byte, using 5 operations
 static bool checkParity(uint8_t value) {
 	value ^= value >> 4;
