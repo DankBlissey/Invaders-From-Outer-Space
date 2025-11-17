@@ -59,6 +59,49 @@ void CPU::mov(uint8_t& to, uint8_t& from) {
 	to = from;
 }
 
+void CPU::add(uint8_t reg) {
+	AuxCarry = calculateAuxCarryADD(A, reg);
+	Carry = calculateCarryADD(A, reg);
+	A += reg;
+	Parity = checkParity(A);
+	Zero = (A == 0);
+	Sign = checkSign(A);
+}
+
+void CPU::adc(uint8_t reg) {
+	if (Carry) {
+		reg++;
+	}
+	AuxCarry = calculateAuxCarryADD(A, reg);
+	Carry = calculateCarryADD(A, reg);
+	A += reg;
+	Parity = checkParity(A);
+	Zero = (A == 0);
+	Sign = checkSign(A);
+}
+
+void CPU::sub(uint8_t reg) {
+	reg = ~reg + 1;
+	AuxCarry = calculateAuxCarryADD(A, reg);
+	Carry = !calculateCarryADD(A, reg);
+	A += reg;
+	Parity = checkParity(A);
+	Zero = (A == 0);
+	Sign = checkSign(A);
+}
+
+void CPU::sbb(uint8_t reg) {
+	if (Carry) {
+		reg++;
+	}
+	reg = ~reg + 1;
+	AuxCarry = calculateAuxCarryADD(A, reg);
+	Carry = !calculateCarryADD(A, reg);
+	A += reg;
+	Parity = checkParity(A);
+	Zero = (A == 0);
+	Sign = checkSign(A);
+}
 
 
 // Specific opcode functions only below here
@@ -575,131 +618,131 @@ void CPU::hlt() {
 }
 
 void CPU::addB() {
-	// Do nothing
+	add(B);
 }
 
 void CPU::addC() {
-	// Do nothing
+	add(C);
 }
 
 void CPU::addD() {
-	// Do nothing
+	add(D);
 }
 
 void CPU::addE() {
-	// Do nothing
+	add(E);
 }
 
 void CPU::addH() {
-	// Do nothing
+	add(H);
 }
 
 void CPU::addL() {
-	// Do nothing
+	add(L);
 }
 
 void CPU::addM() {
-	// Do nothing
+	add(readMem(readPairH()));
 }
 
 void CPU::addA() {
-	// Do nothing
+	add(A);
 }
 
 void CPU::adcB() {
-	// Do nothing
+	adc(B);
 }
 
 void CPU::adcC() {
-	// Do nothing
+	adc(C);
 }
 
 void CPU::adcD() {
-	// Do nothing
+	adc(D);
 }
 
 void CPU::adcE() {
-	// Do nothing
+	adc(E);
 }
 
 void CPU::adcH() {
-	// Do nothing
+	adc(H);
 }
 
 void CPU::adcL() {
-	// Do nothing
+	adc(L);
 }
 
 void CPU::adcM() {
-	// Do nothing
+	adc(readMem(readPairH()));
 }
 
 void CPU::adcA() {
-	// Do nothing
+	adc(A);
 }
 
 void CPU::subB() {
-	// Do nothing
+	sub(B);
 }
 
 void CPU::subC() {
-	// Do nothing
+	sub(C);
 }
 
 void CPU::subD() {
-	// Do nothing
+	sub(D);
 }
 
 void CPU::subE() {
-	// Do nothing
+	sub(E);
 }
 
 void CPU::subH() {
-	// Do nothing
+	sub(H);
 }
 
 void CPU::subL() {
-	// Do nothing
+	sub(L);
 }
 
 void CPU::subM() {
-	// Do nothing
+	sub(readMem(readPairH()));
 }
 
 void CPU::subA() {
-	// Do nothing
+	sub(A);
 }
 
 void CPU::sbbB() {
-	// Do nothing
+	sbb(B);
 }
 
 void CPU::sbbC() {
-	// Do nothing
+	sbb(C);
 }
 
 void CPU::sbbD() {
-	// Do nothing
+	sbb(D);
 }
 
 void CPU::sbbE() {
-	// Do nothing
+	sbb(E);
 }
 
 void CPU::sbbH() {
-	// Do nothing
+	sbb(H);
 }
 
 void CPU::sbbL() {
-	// Do nothing
+	sbb(L);
 }
 
 void CPU::sbbM() {
-	// Do nothing
+	sbb(readMem(readPairH()));
 }
 
 void CPU::sbbA() {
-	// Do nothing
+	sbb(A);
 }
 
 void CPU::anaB() {
