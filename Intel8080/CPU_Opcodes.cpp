@@ -14,6 +14,7 @@ static bool checkParity(uint8_t value) {
 	return !((0x6996 >> value) & 1);
 }
 
+// Checks if byte is zero
 static bool checkZero(uint8_t value) {
 	return (value == 0);
 }
