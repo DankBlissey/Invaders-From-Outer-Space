@@ -108,9 +108,17 @@ void CPU::writeMem(uint16_t addr, uint8_t data) {
 uint8_t CPU::readIn(uint8_t port) {
 	return in[port];
 }
+// Read a byte from the output bus
+uint8_t CPU::readOut(uint8_t port) {
+	return out[port];
+}
 // Write a byte to the output bus
 void CPU::writeOut(uint8_t port, uint8_t data) {
 	out[port] = data;
+}
+// Write a byte to the input bus
+void CPU::writeIn(uint8_t port, uint8_t data) {
+	in[port] = data;
 }
 // Write a 16-bit value to the BC register pair
 void CPU::writePairB(uint16_t data) {

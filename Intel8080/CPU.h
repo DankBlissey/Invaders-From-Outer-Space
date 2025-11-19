@@ -20,6 +20,10 @@ class CPU {
 
 		void loadProgram(); // Load a program into memory
 
+		void writeIn(uint8_t, uint8_t);
+
+		uint8_t readOut(uint8_t);
+
 		bool operator==(CPU const&) const; // Overwrite == operator to compare the registers of the cpu
 
 	protected:
@@ -40,7 +44,7 @@ class CPU {
 
 		void stackPush(uint16_t);
 		uint16_t stackPop();
-		
+
 		auto tiedRegisters() const;
 
 		uint16_t pc;					// Program counter
