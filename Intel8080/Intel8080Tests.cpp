@@ -589,5 +589,18 @@ TEST_CASE("POP Pop data off stack", "[opcodes, regPairInstructions]") {
             REQUIRE(testCpu.getL() == 0x3D);
             REQUIRE(testCpu.getH() == 0x93);
         }
+        SECTION("Example 2") {
+            testCpu.writeMem(0x2C00, 0xC3);
+            testCpu.writeMem(0x2C01, 0xFF);
+            testCpu.setSp(0x2C00);
+            testCpu.writeMem(0x000, 0xF1); // POP PSW
+            testCpu.cycle();
+            REQUIRE(testCpu.getA() == 0xFF);
+            REQUIRE(testCpu.getSign() == true);
+            REQUIRE(testCpu.getZero() == true);
+            REQUIRE(testCpu.getAuxCarry() == false);
+            REQUIRE(testCpu.getParity() == false);
+            REQUIRE(testCpu.getCarry() == true);
+        }
     }
 }
