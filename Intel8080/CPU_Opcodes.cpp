@@ -36,6 +36,10 @@ static bool calculateCarryADD(uint8_t a, uint8_t b) {
 	return (uint16_t)a + (uint16_t)b > 0xFF;
 }
 
+static uint8_t twosComplement(uint8_t value) {
+	return ~value + 1;
+}
+
 
 
 // General purpose opcode functions are here
@@ -81,7 +85,7 @@ void CPU::adc(uint8_t reg) {
 }
 
 void CPU::sub(uint8_t reg) {
-	reg = ~reg + 1;
+	reg = twosComplement(reg);
 	AuxCarry = calculateAuxCarryADD(A, reg);
 	Carry = !calculateCarryADD(A, reg);
 	A += reg;
@@ -94,7 +98,7 @@ void CPU::sbb(uint8_t reg) {
 	if (Carry) {
 		reg++;
 	}
-	reg = ~reg + 1;
+	reg = twosComplement(reg);
 	AuxCarry = calculateAuxCarryADD(A, reg);
 	Carry = !calculateCarryADD(A, reg);
 	A += reg;
@@ -126,6 +130,19 @@ void CPU::ora(uint8_t reg) {
 	Parity = checkParity(A);
 	Zero = checkZero(A);
 	Sign = checkSign(A);
+}
+
+void CPU::cmp(uint8_t reg) {
+	uint8_t negativeReg = twosComplement(reg);
+	uint8_t subValue = A + negativeReg;
+	AuxCarry = calculateAuxCarryADD(A, negativeReg);
+	Carry = !calculateCarryADD(A,negativeReg);
+	if (checkSign(A) != checkSign(reg)) {
+		Carry = !Carry;
+	}
+	Sign = checkSign(subValue);
+	Parity = checkParity(subValue);
+	Zero = checkZero(subValue);
 }
 
 // Specific opcode functions only below here
@@ -866,35 +883,35 @@ void CPU::oraA() {
 }
 
 void CPU::cmpB() {
-	// Do nothing
+	cmp(B);
 }
 
 void CPU::cmpC() {
-	// Do nothing
+	cmp(C);
 }
 
 void CPU::cmpD() {
-	// Do nothing
+	cmpD();
 }
 
 void CPU::cmpE() {
-	// Do nothing
+	cmp(E);
 }
 
 void CPU::cmpH() {
-	// Do nothing
+	cmp(H);
 }
 
 void CPU::cmpL() {
-	// Do nothing
+	cmp(L);
 }
 
 void CPU::cmpM() {
-	// Do nothing
+	cmp(readMem(readPairH()));
 }
 
 void CPU::cmpA() {
-	// Do nothing
+	cmp(A);
 }
 
 void CPU::rnz() {

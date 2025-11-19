@@ -63,6 +63,7 @@ class CPU {
 		void ana(uint8_t);
 		void xra(uint8_t);
 		void ora(uint8_t);
+		void cmp(uint8_t);
 
 		// Specific Opcode functions
 		void nop();
