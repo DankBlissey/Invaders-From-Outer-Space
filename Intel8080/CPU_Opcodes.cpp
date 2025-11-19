@@ -260,7 +260,12 @@ void CPU::mviM() {
 }
 
 void CPU::rlc() {
-	// Do nothing
+	Carry = checkSign(A);
+	uint8_t temp = A << 1;
+	if(Carry) {
+		temp = temp | 0x01;
+	}
+	A = temp;
 }
 
 void CPU::ral() {
@@ -384,7 +389,12 @@ void CPU::mviA() {
 }
 
 void CPU::rrc() {
-	// Do nothing
+	Carry = (A & 0x01) != 0;
+	uint8_t temp = A >> 1;
+	if(Carry) {
+		temp = temp | 0x80;
+	}
+	A = temp;
 }
 
 void CPU::rar() {

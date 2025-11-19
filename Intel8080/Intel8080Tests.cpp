@@ -499,3 +499,25 @@ TEST_CASE("CMP Compare register or memory with accumulator", "[opcodes, regOrMem
         }
     }
 }
+
+TEST_CASE("RLC Rotate accumulator left", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setA(0xF2);
+        testCpu.writeMem(0x000, 0x07); // RLC
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0xE5);
+        REQUIRE(testCpu.getCarry() == true);
+    }
+}
+
+TEST_CASE("RRC Rotate accumulator right", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setA(0xF2);
+        testCpu.writeMem(0x000, 0x0F); // RRC
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0x79);
+        REQUIRE(testCpu.getCarry() == false);
+    }
+}
