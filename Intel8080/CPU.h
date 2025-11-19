@@ -40,6 +40,7 @@ class CPU {
 		void sub(uint8_t);
 		void sbb(uint8_t);
 		void ana(uint8_t);
+		void xra(uint8_t);
 
 		// Specific Opcode functions
 		void nop();

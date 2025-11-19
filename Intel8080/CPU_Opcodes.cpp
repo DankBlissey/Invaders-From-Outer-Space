@@ -14,6 +14,10 @@ static bool checkParity(uint8_t value) {
 	return !((0x6996 >> value) & 1);
 }
 
+static bool checkZero(uint8_t value) {
+	return (value == 0);
+}
+
 // Functions to calculate the carry and auxiliary carry flags
 static bool calculateAuxCarryINR(uint8_t value) {
 	return ((value & 0x0F) + 1) > 0x0F;
@@ -42,7 +46,7 @@ void CPU::inr(uint8_t& reg) {
 	AuxCarry = calculateAuxCarryINR(reg);
 	reg++;
 	Parity = checkParity(reg);
-	Zero = (reg == 0);
+	Zero = checkZero(reg);
 	Sign = checkSign(reg);
 }
 
@@ -50,7 +54,7 @@ void CPU::dcr(uint8_t& reg) {
 	AuxCarry = calculateAuxCarryDCR(reg);
 	reg--;
 	Parity = checkParity(reg);
-	Zero = (reg == 0);
+	Zero = checkZero(reg);
 	Sign = checkSign(reg);
 }
 
@@ -63,7 +67,7 @@ void CPU::add(uint8_t reg) {
 	Carry = calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = (A == 0);
+	Zero = checkZero(reg);
 	Sign = checkSign(A);
 }
 
@@ -75,7 +79,7 @@ void CPU::adc(uint8_t reg) {
 	Carry = calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = (A == 0);
+	Zero = checkZero(reg);
 	Sign = checkSign(A);
 }
 
@@ -85,7 +89,7 @@ void CPU::sub(uint8_t reg) {
 	Carry = !calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = (A == 0);
+	Zero = checkZero(reg);
 	Sign = checkSign(A);
 }
 
@@ -98,7 +102,7 @@ void CPU::sbb(uint8_t reg) {
 	Carry = !calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = (A == 0);
+	Zero = checkZero(reg);
 	Sign = checkSign(A);
 }
 
@@ -106,8 +110,17 @@ void CPU::ana(uint8_t reg) {
 	A = A & reg;
 	Carry = false;
 	Parity = checkParity(A);
-	Zero = (A == 0);
+	Zero = checkZero(reg);
 	Sign = checkSign(A);
+}
+
+void CPU::xra(uint8_t reg) {
+	A = A ^ reg;
+	Carry = false;
+	AuxCarry = false;
+	Parity = checkParity(A);
+	Zero = checkZero(reg);
+	Sign = checkSign(reg);
 }
 
 // Specific opcode functions only below here
@@ -784,35 +797,35 @@ void CPU::anaA() {
 }
 
 void CPU::xraB() {
-	// Do nothing
+	xra(B);
 }
 
 void CPU::xraC() {
-	// Do nothing
+	xra(C);
 }
 
 void CPU::xraD() {
-	// Do nothing
+	xra(D);
 }
 
 void CPU::xraE() {
-	// Do nothing
+	xra(E);
 }
 
 void CPU::xraH() {
-	// Do nothing
+	xra(H);
 }
 
 void CPU::xraL() {
-	// Do nothing
+	xra(L);
 }
 
 void CPU::xraM() {
-	// Do nothing
+	xra(readMem(readPairH()));
 }
 
 void CPU::xraA() {
-	// Do nothing
+	xra(A);
 }
 
 void CPU::oraB() {
