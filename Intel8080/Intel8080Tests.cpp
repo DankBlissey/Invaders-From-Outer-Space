@@ -305,3 +305,83 @@ TEST_CASE("MOV Move data from one register or memory location to another", "[opc
         REQUIRE(testCpu.getE() == 0x20);
     }
 }
+
+TEST_CASE("STAX Store accumulator to memory", "[opcodes, singleRegInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setB(0x3F);
+        testCpu.setC(0x16);
+        testCpu.setA(0xFF);
+        testCpu.writeMem(0x3F16, 0x20);
+        testCpu.writeMem(0x000, 0x02); // STAX B
+        testCpu.cycle();
+        REQUIRE(testCpu.readPairB() == 0x3F16);
+        REQUIRE(testCpu.readMem(testCpu.readPairB()) == 0xFF);
+    }
+}
+
+TEST_CASE("LDAX Load accumulator with data from memory", "[opcodes, singleRegInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setD(0x93);
+        testCpu.setE(0x8B);
+        testCpu.setA(0xFF);
+        testCpu.writeMem(0x938B, 0x20);
+        testCpu.writeMem(0x000, 0x1A); // LDAX D
+        testCpu.cycle();
+        REQUIRE(testCpu.readPairD() == 0x938B);
+        REQUIRE(testCpu.getA() == 0x20);
+    }
+}
+
+TEST_CASE("ADD Add register or memory to accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example 1") {
+        testCpu.setD(0x2E);
+        testCpu.setA(0x6C);
+        testCpu.writeMem(0x000, 0x82); // ADD D
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0x9A);
+        REQUIRE(testCpu.getSign() == true);
+        REQUIRE(testCpu.getParity() == true);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getCarry() == false);
+        REQUIRE(testCpu.getAuxCarry() == true);
+    }
+    SECTION("Manual example 2") {
+        uint8_t value {9};
+        testCpu.setA(value);
+        testCpu.writeMem(0x000, 0x87); // ADD A
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == value * 2);
+    }
+}
+
+TEST_CASE("ADC Add register or memory to accumulator with carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setC(0x3D);
+        testCpu.setA(0x42);
+        testCpu.writeMem(0x000, 0x89); // ADC C
+        SECTION("Without carry") {
+            testCpu.setCarry(false);
+            testCpu.cycle();
+            REQUIRE(testCpu.getA() == 0x7F);
+            REQUIRE(testCpu.getCarry() == false);
+            REQUIRE(testCpu.getSign() == false);
+            REQUIRE(testCpu.getZero() == false);
+            REQUIRE(testCpu.getParity() == false);
+            REQUIRE(testCpu.getAuxCarry() == false);
+        }
+        SECTION("With carry") {
+            testCpu.setCarry(true);
+            testCpu.cycle();
+            REQUIRE(testCpu.getA() == 0x80);
+            REQUIRE(testCpu.getCarry() == false);
+            REQUIRE(testCpu.getSign() == true);
+            REQUIRE(testCpu.getZero() == false);
+            REQUIRE(testCpu.getParity() == false);
+            REQUIRE(testCpu.getAuxCarry() == true);
+        }
+    }
+}

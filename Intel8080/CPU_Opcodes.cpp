@@ -311,7 +311,7 @@ void CPU::ldaxB() {
 }
 
 void CPU::ldaxD() {
-	A = readMem(readPairH());
+	A = readMem(readPairD());
 }
 
 void CPU::lhld() {
