@@ -385,3 +385,35 @@ TEST_CASE("ADC Add register or memory to accumulator with carry", "[opcodes, reg
         }
     }
 }
+
+TEST_CASE("SUB Subtract register or memory from accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setA(0x3E);
+        testCpu.writeMem(0x000, 0x97); // SUB A
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0);
+        REQUIRE(testCpu.getCarry() == false);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getZero() == true);
+        REQUIRE(testCpu.getParity() == true);
+        REQUIRE(testCpu.getAuxCarry() == true);
+    }
+}
+
+TEST_CASE("SBB Subtract register or memory from accumulator with borrow", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manaul example") {
+        testCpu.setL(0x02);
+        testCpu.setA(0x04);
+        testCpu.setCarry(true);
+        testCpu.writeMem(0x000, 0x9D); // SBB L
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 1);
+        REQUIRE(testCpu.getCarry() == false);
+        REQUIRE(testCpu.getSign() == false);
+        REQUIRE(testCpu.getZero() == false);
+        REQUIRE(testCpu.getParity() == false);
+        REQUIRE(testCpu.getAuxCarry() == true);
+    }
+}
