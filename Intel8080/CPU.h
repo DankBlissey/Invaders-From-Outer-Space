@@ -347,7 +347,7 @@ class CPU {
 
 		void cycle();					// CPU emulation cycle
 
-		void loadTestProgram(); // Load a test program into memory
+		void loadProgram(); // Load a program into memory
 
 		bool operator==(CPU const&) const; // Overwrite == operator to compare the registers of the cpu
 

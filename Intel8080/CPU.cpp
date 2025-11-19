@@ -74,17 +74,8 @@ void CPU::init() {
 	Sign = Zero = AuxCarry = Parity = Carry = false;
 }
 
-void CPU::loadTestProgram() {
-	// Load a program into memory for testing purposes
-	//writeMem(0x0000, 0x37); // STC set carry bit to 1
-	//writeMem(0x0001, 0x3F); // CMC complement carry bit to 0
-	//writeMem(0x0002, 0x3F); // CMC complement carry bit to 1
-
-	//writeMem(0x0003, 0x14); // INR D increment D register
-	H = 0x3A; // Set H to 0x3A
-	L = 0x7C; // Set L to 0x7C
-	writeMem(0x3A7C, 0x40); // Set memory location 0x3A7C to 0x40
-	writeMem(0x0000, 0x35); // DCR M decrement memory location pointed to by HL
+void CPU::loadProgram() {
+	// Do nothing
 }
 
 // Execute a single CPU cycle
