@@ -27,6 +27,8 @@ class CPU {
 		uint16_t readPairD();
 		void writePairH(uint16_t);
 		uint16_t readPairH();
+		void writePairPSW(uint16_t);
+		uint16_t readPairPSW();
 
 		void stackPush(uint16_t);
 		uint16_t stackPop();

@@ -139,16 +139,43 @@ void CPU::writePairH(uint16_t data) {
 uint16_t CPU::readPairH() {
 	return (H << 8) | L;
 }
+// Write a 16 bit value to the AF register pair (Accumulator and then the flags)
+void CPU::writePairPSW(uint16_t data) {
+	A = (data & 0xFF00) >> 8;
+	uint8_t Flags = data & 0x00FF;
+	// Sign, Zero, 0, AuxCarry, 0, Parity, 1, Carry
+	Sign = Flags & 0b00000001;
+	Zero = Flags & 0b00000010;
+	// 0b00000100 is always 0
+	AuxCarry = Flags & 0b00001000;
+	// 0b00010000 is always 0
+	Parity = Flags & 0b00100000;
+	// 0b01000000 is always 1
+	Carry = Flags & 0b10000000;
+}
+// Read a 16 bit value from the AF register pair
+uint16_t CPU::readPairPSW() {
+	return (A << 8) |
+		(Sign << 7) |
+		(Zero << 6) |
+		(0 << 5) |
+		(AuxCarry << 4) |
+		(0 << 3) |
+		(Parity << 2) |
+		(1 << 1) |
+		(Carry << 0);
+}
 // Push a 16-bit value onto the stack
 void CPU::stackPush(uint16_t data) {
-	(*mem)[sp] = (data & 0xFF00) >> 8;
-	(*mem)[sp + 1] = data & 0x00FF;
-	sp += 2;
+	(*mem)[sp-1] = (data & 0xFF00) >> 8;
+	(*mem)[sp-2] = data & 0x00FF;
+	sp -= 2;
 }
 // Pop a 16-bit value from the stack
 uint16_t CPU::stackPop() {
-	sp -= 2;
-	return ((*mem)[sp] << 8) | (*mem)[sp + 1];
+	uint16_t pair = ((*mem)[sp + 1] << 8) | (*mem)[sp];
+	sp += 2;
+	return pair;
 }
 
 auto CPU::tiedRegisters() const { return std::tie(pc, sp, cycles, B, C, D, E, H, L, A, Sign, Zero, AuxCarry, Parity, Carry); }

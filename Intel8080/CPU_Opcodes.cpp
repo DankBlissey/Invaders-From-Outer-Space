@@ -948,19 +948,19 @@ void CPU::rp() {
 }
 
 void CPU::popB() {
-	// Do nothing
+	writePairB(stackPop());
 }
 
 void CPU::popD() {
-	// Do nothing
+	writePairD(stackPop());
 }
 
 void CPU::popH() {
-	// Do nothing
+	writePairH(stackPop());
 }
 
 void CPU::popPSW() {
-	// Do nothing
+	writePairPSW(stackPop());
 }
 
 void CPU::jnz() {
@@ -1012,19 +1012,19 @@ void CPU::cp() {
 }
 
 void CPU::pushB() {
-	// Do nothing
+	stackPush(readPairB());
 }
 
 void CPU::pushD() {
-	// Do nothing
+	stackPush(readPairD());
 }
 
 void CPU::pushH() {
-	// Do nothing
+	stackPush(readPairH());
 }
 
 void CPU::pushPSW() {
-	// Do nothing
+	stackPush(readPairPSW());
 }
 
 void CPU::adi() {
