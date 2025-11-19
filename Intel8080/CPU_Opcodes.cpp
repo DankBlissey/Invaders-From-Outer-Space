@@ -137,9 +137,6 @@ void CPU::cmp(uint8_t reg) {
 	uint8_t subValue = A + negativeReg;
 	AuxCarry = calculateAuxCarryADD(A, negativeReg);
 	Carry = !calculateCarryADD(A,negativeReg);
-	if (checkSign(A) != checkSign(reg)) {
-		Carry = !Carry;
-	}
 	Sign = checkSign(subValue);
 	Parity = checkParity(subValue);
 	Zero = checkZero(subValue);

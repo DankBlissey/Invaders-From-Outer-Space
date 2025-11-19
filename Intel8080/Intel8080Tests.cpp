@@ -455,7 +455,7 @@ TEST_CASE("XRA Logical exclusive-or register or memory with accumulator", "[opco
     }
 }
 
-TEST_CASE("ORA Logical or register or memory with accumulator") {
+TEST_CASE("ORA Logical or register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu.init();
     SECTION("Manual example") {
         testCpu.setC(0x0F);
@@ -463,5 +463,39 @@ TEST_CASE("ORA Logical or register or memory with accumulator") {
         testCpu.writeMem(0x000, 0xB1); // ORA C
         testCpu.cycle();
         REQUIRE(testCpu.getA() == 0x3F);
+    }
+}
+
+TEST_CASE("CMP Compare register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setE(0x05);
+        testCpu.writeMem(0x000, 0xBB); // CMP E
+        SECTION("Example 1") {
+            testCpu.setA(0x0A);
+            testCpu.cycle();
+            REQUIRE(testCpu.getA() == 0x0A);
+            REQUIRE(testCpu.getE() == 0x05);
+            REQUIRE(testCpu.getCarry() == false);
+            REQUIRE(testCpu.getZero() == false);
+        }
+        SECTION("Example 2") {
+            testCpu.setA(0x02);
+            testCpu.cycle();
+            REQUIRE(testCpu.getA() == 0x02);
+            REQUIRE(testCpu.getE() == 0x05);
+            REQUIRE(testCpu.getCarry() == true);
+            REQUIRE(testCpu.getZero() == false);
+        }
+        SECTION("Example 3") {
+            uint8_t value = 0x1B;
+            uint8_t negative = ~value + 1;
+            testCpu.setA(negative);
+            testCpu.cycle();
+            REQUIRE(testCpu.getA() == negative);
+            REQUIRE(testCpu.getE() == 0x05);
+            REQUIRE(testCpu.getCarry() == false);
+            REQUIRE(testCpu.getZero() == false);
+        }
     }
 }
