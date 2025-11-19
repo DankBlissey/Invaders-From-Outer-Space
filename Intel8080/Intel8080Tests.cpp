@@ -521,3 +521,27 @@ TEST_CASE("RRC Rotate accumulator right", "[opcodes, regOrMemToAccumulatorInstru
         REQUIRE(testCpu.getCarry() == false);
     }
 }
+
+TEST_CASE("RAL Rotate accumulator left through carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setA(0xB5);
+        testCpu.setCarry(false);
+        testCpu.writeMem(0x000, 0x17); // RAL
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0x6A);
+        REQUIRE(testCpu.getCarry() == true);
+    }
+}
+
+TEST_CASE("RAR Rotate accumulator right through carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setA(0x6A);
+        testCpu.setCarry(true);
+        testCpu.writeMem(0x000, 0x1F);
+        testCpu.cycle();
+        REQUIRE(testCpu.getA() == 0xB5);
+        REQUIRE(testCpu.getCarry() == false);
+    }
+}

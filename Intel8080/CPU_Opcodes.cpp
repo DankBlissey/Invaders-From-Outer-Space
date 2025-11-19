@@ -269,7 +269,12 @@ void CPU::rlc() {
 }
 
 void CPU::ral() {
-	// Do nothing
+	uint8_t temp = A << 1;
+	if(Carry) {
+		temp = temp | 0x01;
+	}
+	Carry = checkSign(A);
+	A = temp;
 }
 
 void CPU::daa() {
@@ -398,7 +403,12 @@ void CPU::rrc() {
 }
 
 void CPU::rar() {
-	// Do nothing
+	uint8_t temp = A >> 1;
+	if(Carry) {
+		temp = temp | 0x80;
+	}
+	Carry = (A & 0x01) != 0;
+	A = temp;
 }
 
 void CPU::cma() {
