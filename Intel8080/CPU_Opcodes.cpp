@@ -64,7 +64,7 @@ void CPU::add(uint8_t reg) {
 	Carry = calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = checkZero(reg);
+	Zero = checkZero(A);
 	Sign = checkSign(A);
 }
 
@@ -76,7 +76,7 @@ void CPU::adc(uint8_t reg) {
 	Carry = calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = checkZero(reg);
+	Zero = checkZero(A);
 	Sign = checkSign(A);
 }
 
@@ -86,7 +86,7 @@ void CPU::sub(uint8_t reg) {
 	Carry = !calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = checkZero(reg);
+	Zero = checkZero(A);
 	Sign = checkSign(A);
 }
 
@@ -99,7 +99,7 @@ void CPU::sbb(uint8_t reg) {
 	Carry = !calculateCarryADD(A, reg);
 	A += reg;
 	Parity = checkParity(A);
-	Zero = checkZero(reg);
+	Zero = checkZero(A);
 	Sign = checkSign(A);
 }
 
@@ -107,7 +107,7 @@ void CPU::ana(uint8_t reg) {
 	A = A & reg;
 	Carry = false;
 	Parity = checkParity(A);
-	Zero = checkZero(reg);
+	Zero = checkZero(A);
 	Sign = checkSign(A);
 }
 
@@ -116,8 +116,16 @@ void CPU::xra(uint8_t reg) {
 	Carry = false;
 	AuxCarry = false;
 	Parity = checkParity(A);
-	Zero = checkZero(reg);
-	Sign = checkSign(reg);
+	Zero = checkZero(A);
+	Sign = checkSign(A);
+}
+
+void CPU::ora(uint8_t reg) {
+	A = A | reg;
+	Carry = false;
+	Parity = checkParity(A);
+	Zero = checkZero(A);
+	Sign = checkSign(A);
 }
 
 // Specific opcode functions only below here
@@ -826,35 +834,35 @@ void CPU::xraA() {
 }
 
 void CPU::oraB() {
-	// Do nothing
+	ora(B);
 }
 
 void CPU::oraC() {
-	// Do nothing
+	ora(C);
 }
 
 void CPU::oraD() {
-	// Do nothing
+	ora(D);
 }
 
 void CPU::oraE() {
-	// Do nothing
+	ora(E);
 }
 
 void CPU::oraH() {
-	// Do nothing
+	ora(H);
 }
 
 void CPU::oraL() {
-	// Do nothing
+	ora(L);
 }
 
 void CPU::oraM() {
-	// Do nothing
+	ora(readMem(readPairH()));
 }
 
 void CPU::oraA() {
-	// Do nothing
+	ora(A);
 }
 
 void CPU::cmpB() {
