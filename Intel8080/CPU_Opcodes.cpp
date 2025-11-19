@@ -36,10 +36,6 @@ static bool calculateCarryADD(uint8_t a, uint8_t b) {
 	return (uint16_t)a + (uint16_t)b > 0xFF;
 }
 
-static bool calculateCarryADC(uint8_t a, uint8_t b, bool carryIn) {
-	return (uint16_t)a + (uint16_t)b + (uint16_t)carryIn > 0xFF;
-}
-
 
 
 // General purpose opcode functions are here
