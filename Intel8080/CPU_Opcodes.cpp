@@ -192,19 +192,19 @@ void CPU::sta() {
 }
 
 void CPU::inxB() {
-	// Do nothing
+	writePairB(readPairB() + 1);
 }
 
 void CPU::inxD() {
-	// Do nothing
+	writePairD(readPairD() + 1);
 }
 
 void CPU::inxH() {
-	// Do nothing
+	writePairH(readPairH() + 1);
 }
 
 void CPU::inxSP() {
-	// Do nothing
+	sp++;
 }
 
 void CPU::inrB() {
@@ -340,19 +340,19 @@ void CPU::lda() {
 }
 
 void CPU::dcxB() {
-	// Do nothing
+	writePairB(readPairB() - 1);
 }
 
 void CPU::dcxD() {
-	// Do nothing
+	writePairD(readPairD() - 1);
 }
 
 void CPU::dcxH() {
-	// Do nothing
+	writePairH(readPairH() - 1);
 }
 
 void CPU::dcxSP() {
-	// Do nothing
+	sp--;
 }
 
 void CPU::inrC() {

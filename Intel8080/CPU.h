@@ -72,7 +72,8 @@ class CPU {
 		void xra(uint8_t);
 		void ora(uint8_t);
 		void cmp(uint8_t);
-		void dad(uint16_t); 
+		void dad(uint16_t);
+		void inx(uint16_t);
 
 		// Specific Opcode functions
 		void nop();

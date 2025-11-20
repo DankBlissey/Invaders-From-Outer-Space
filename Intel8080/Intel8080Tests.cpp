@@ -628,3 +628,45 @@ TEST_CASE("DAD Double add", "[opcodes, regPairInstructions]") {
         }
     }
 }
+
+TEST_CASE("INX Increment register pair", "[opcodes, regPairInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        SECTION("Example 1") {
+            testCpu.setD(0x38);
+            testCpu.setE(0xFF);
+            testCpu.setMem(0x000, 0x13); // INX D
+            testCpu.cycle();
+            REQUIRE(testCpu.getD() == 0x39);
+            REQUIRE(testCpu.getE() == 0x00);
+        }
+        SECTION("Example 2") {
+            testCpu.setSp(0xFFFF);
+            testCpu.setMem(0x000, 0x33); // INX SP
+            testCpu.cycle();
+            REQUIRE(testCpu.getSp() == 0x0000);
+        }
+    }
+    SECTION("Example 3") {
+        testCpu.setB(0x38);
+        testCpu.setC(0xA4);
+        testCpu.setMem(0x000, 0x03); // INX B
+        testCpu.cycle();
+        REQUIRE(testCpu.getB() == 0x38);
+        REQUIRE(testCpu.getC() == 0xA5);
+    }
+}
+
+TEST_CASE("DCX Decrement register pair", "[opcodes, regPairInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        SECTION("Example 1") {
+            testCpu.setH(0x98);
+            testCpu.setL(0x00);
+            testCpu.setMem(0x000, 0x2B); // DCX H
+            testCpu.cycle();
+            REQUIRE(testCpu.getH() == 0x97);
+            REQUIRE(testCpu.getL() == 0xFF);
+        }
+    }
+}
