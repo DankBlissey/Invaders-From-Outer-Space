@@ -740,7 +740,7 @@ void CPU::movAA() {
 }
 
 void CPU::hlt() {
-	// Do nothing
+	STOPPED = true;
 }
 
 void CPU::addB() {

@@ -53,6 +53,7 @@ class CPU {
 		bool Sign, Zero, AuxCarry, 
 			Parity, Carry;				// Flags
 		bool INTE; 						// Interrupt enable flip/flop
+		bool STOPPED;					// CPU stopped state, happens if halt instruction happens, only an interrupt resolves it
 		std::array<uint8_t, 256> in;	// input bus
 		std::array<uint8_t, 256> out;	// Output bus
 
