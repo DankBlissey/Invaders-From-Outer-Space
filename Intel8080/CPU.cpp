@@ -34,7 +34,7 @@ CPU::CPU()
 	clearMem();
 	cycles = 0;
 	B = C = D = E = H = L = A = 0;
-	Sign = Zero = AuxCarry = Parity = Carry = false;
+	INTE = Sign = Zero = AuxCarry = Parity = Carry = false;
 }
 
 CPU::CPU(const CPU& c)
@@ -56,6 +56,7 @@ CPU::CPU(const CPU& c)
 	AuxCarry = c.AuxCarry;
 	Parity = c.Parity;
 	Carry = c.Carry;
+	INTE = c.INTE;
 }
 
 // Initialise the CPU
@@ -71,7 +72,7 @@ void CPU::init() {
 	clearMem();
 	cycles = 0;
 	B = C = D = E = H = L = A = 0;
-	Sign = Zero = AuxCarry = Parity = Carry = false;
+	INTE = Sign = Zero = AuxCarry = Parity = Carry = false;
 }
 
 void CPU::loadProgram() {

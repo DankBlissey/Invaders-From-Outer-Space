@@ -1052,7 +1052,7 @@ void CPU::jmp() {
 }
 
 void CPU::outFunc() {
-	// Do nothing
+	writeOut(readMem(pc + 1), A);
 }
 
 void CPU::xthl() {
@@ -1065,7 +1065,7 @@ void CPU::xthl() {
 }
 
 void CPU::di() {
-	// Do nothing
+	INTE = false;
 }
 
 void CPU::cnz() {
@@ -1193,7 +1193,7 @@ void CPU::jm() {
 }
 
 void CPU::inFunc() {
-	// Do nothing
+	A = readIn(readMem(pc + 1));
 }
 
 void CPU::xchg() {
@@ -1202,7 +1202,7 @@ void CPU::xchg() {
 }
 
 void CPU::ei() {
-	// Do nothing
+	INTE = true;
 }
 
 void CPU::cz() {

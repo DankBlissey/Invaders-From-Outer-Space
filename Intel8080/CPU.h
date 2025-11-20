@@ -52,6 +52,7 @@ class CPU {
 		uint8_t B, C, D, E, H, L, A;	// General purpose registers
 		bool Sign, Zero, AuxCarry, 
 			Parity, Carry;				// Flags
+		bool INTE; 						// Interrupt enable flip/flop
 		std::array<uint8_t, 256> in;	// input bus
 		std::array<uint8_t, 256> out;	// Output bus
 
