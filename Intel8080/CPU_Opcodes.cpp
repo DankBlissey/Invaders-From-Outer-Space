@@ -999,7 +999,12 @@ void CPU::outFunc() {
 }
 
 void CPU::xthl() {
-	// Do nothing
+	uint8_t oldL {L};
+	uint8_t oldH {H};
+	L = readMem(sp);
+	H = readMem(sp + 1);
+	writeMem(sp, oldL);
+	writeMem(sp + 1, oldH);
 }
 
 void CPU::di() {

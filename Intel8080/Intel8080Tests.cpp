@@ -684,3 +684,20 @@ TEST_CASE("XCHG Exchange registers", "[opcodes, regPairInstructions]") {
         REQUIRE(testCpu.getPairH() == 0x3355);
     }
 }
+
+TEST_CASE("XTHL Exchange stack", "[opcodes, regPairInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setSp(0x10AD);
+        testCpu.setH(0x0B);
+        testCpu.setL(0x3C);
+        testCpu.setMem(0x10AD, 0xF0);
+        testCpu.setMem(0x10AE, 0x0D);
+        testCpu.setMem(0x000, 0xE3); // XTHL
+        testCpu.cycle();
+        REQUIRE(testCpu.getMem(0x10AD) == 0x3C);
+        REQUIRE(testCpu.getMem(0x10AE) == 0x0B);
+        REQUIRE(testCpu.getH() == 0x0D);
+        REQUIRE(testCpu.getL() == 0xF0);
+    }
+}
