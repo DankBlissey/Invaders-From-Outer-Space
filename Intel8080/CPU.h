@@ -72,6 +72,7 @@ class CPU {
 		void cmp(uint8_t);
 		void dad(uint16_t);
 		void inx(uint16_t);
+		void mvi(uint8_t&);
 
 		// Specific Opcode functions
 		void nop();

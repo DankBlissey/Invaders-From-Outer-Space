@@ -153,6 +153,10 @@ void CPU::dad(uint16_t reg) {
 	writePairH(pair + reg);
 }
 
+void CPU::mvi(uint8_t& reg) {
+	reg = readMem(pc+1);
+}
+
 // Specific opcode functions only below here
 
 void CPU::nop() {
@@ -258,19 +262,19 @@ void CPU::dcrM() {
 }
 
 void CPU::mviB() {
-	// Do nothing
+	mvi(B);
 }
 
 void CPU::mviD() {
-	// Do nothing
+	mvi(D);
 }
 
 void CPU::mviH() {
-	// Do nothing
+	mvi(H);
 }
 
 void CPU::mviM() {
-	// Do nothing
+	writeMem(readPairH(), readMem(pc+1));
 }
 
 void CPU::rlc() {
@@ -392,19 +396,19 @@ void CPU::dcrA() {
 }
 
 void CPU::mviC() {
-	// Do nothing
+	mvi(C);
 }
 
 void CPU::mviE() {
-	// Do nothing
+	mvi(E);
 }
 
 void CPU::mviL() {
-	// Do nothing
+	mvi(L);
 }
 
 void CPU::mviA() {
-	// Do nothing
+	mvi(A);
 }
 
 void CPU::rrc() {

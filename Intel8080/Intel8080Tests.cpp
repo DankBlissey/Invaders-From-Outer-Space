@@ -735,3 +735,19 @@ TEST_CASE("LXI Load 16 bit value into register pair", "[opcodes, immediateInstru
         }
     }
 }
+
+TEST_CASE("MVI Move immediate data", "[opcodes, immediateInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setMem(0x000, 0x26); // MVI H
+        testCpu.setMem(0x001, 0x3C);
+        testCpu.setMem(0x002, 0x2E); // MVI L
+        testCpu.setMem(0x003, 0xF4);
+        testCpu.setMem(0x004, 0x36); // MVI M
+        testCpu.setMem(0x005, 0xFF);
+        for (int i = 0; i < 3; i++) {
+            testCpu.cycle();
+        }
+        REQUIRE(testCpu.getMem(0x3CF4) == 0x0FF);
+    }
+}
