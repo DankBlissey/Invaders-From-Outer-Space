@@ -85,7 +85,7 @@ void CPU::cycle() {
 	// Execute the opcode
 	(this->*functptr[opcode])();
 	// Increment the program counter
-	pc += 1;
+	pc += opcodeByteLength[opcode];
 	// Increment the cycle count
 	cycles += opcodeCycles[opcode];
 }
