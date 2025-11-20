@@ -994,23 +994,39 @@ void CPU::popPSW() {
 }
 
 void CPU::jnz() {
-	// Do nothing
+	if (!Zero) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
 }
 
 void CPU::jnc() {
-	// Do nothing
+	if (!Carry) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
 }
 
 void CPU::jpo() {
-	// Do nothing
+	if (!Parity) {
+		pc = readImmediate();
+	} else {
+		pc +=3;
+	}
 }
 
 void CPU::jp() {
-	// Do nothing
+	if (!Sign) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
 }
 
 void CPU::jmp() {
-	// Do nothing
+	pc = readImmediate();
 }
 
 void CPU::outFunc() {
@@ -1131,7 +1147,7 @@ void CPU::ret() {
 }
 
 void CPU::pchl() {
-	// Do nothing
+	pc = combineBytes(H,L);
 }
 
 void CPU::sphl() {
@@ -1139,19 +1155,35 @@ void CPU::sphl() {
 }
 
 void CPU::jz() {
-	// Do nothing
+	if (Zero) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
 }
 
 void CPU::jc() {
-	// Do nothing
+	if (Carry) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
 }
 
 void CPU::jpe() {
-	// Do nothing
+	if (Parity) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
 }
 
 void CPU::jm() {
-	// Do nothing
+	if (Sign) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
 }
 
 void CPU::inFunc() {
