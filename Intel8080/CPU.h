@@ -58,6 +58,8 @@ class CPU {
 		using OpFunc = void (CPU::*)();
 		static const OpFunc functptr[256];
 
+		uint16_t readImmediate();
+
 		// General opcode functions
 		void dcr(uint8_t&);
 		void inr(uint8_t&);

@@ -157,6 +157,10 @@ void CPU::mvi(uint8_t& reg) {
 	reg = readMem(pc+1);
 }
 
+uint16_t CPU::readImmediate() {
+	return (readMem(pc + 2) << 8) | readMem(pc + 1);
+}
+
 // Specific opcode functions only below here
 
 void CPU::nop() {
@@ -180,7 +184,7 @@ void CPU::lxiH() {
 }
 
 void CPU::lxiSP() {
-	sp = (readMem(pc+2) << 8) | readMem(pc+1);
+	sp = readImmediate();
 }
 
 void CPU::staxB() {
@@ -192,11 +196,13 @@ void CPU::staxD() {
 }
 
 void CPU::shld() {
-	// Do nothing
+	uint16_t addr {readImmediate()};
+	writeMem(addr, L);
+	writeMem(addr + 1, H);
 }
 
 void CPU::sta() {
-	// Do nothing
+	writeMem(readImmediate(), A);
 }
 
 void CPU::inxB() {
@@ -340,11 +346,13 @@ void CPU::ldaxD() {
 }
 
 void CPU::lhld() {
-	// Do nothing
+	uint16_t addr {readImmediate()};
+	L = readMem(addr);
+	H = readMem(addr + 1);
 }
 
 void CPU::lda() {
-	// Do nothing
+	A = readMem(readImmediate());
 }
 
 void CPU::dcxB() {
