@@ -22,6 +22,8 @@ class CPU {
 
 		uint8_t readOut(uint8_t);
 
+		void requestInterrupt(uint8_t);
+
 		bool operator==(CPU const&) const; // Overwrite == operator to compare the registers of the cpu
 
 	protected:
@@ -52,7 +54,8 @@ class CPU {
 		uint8_t B, C, D, E, H, L, A;	// General purpose registers
 		bool Sign, Zero, AuxCarry, 
 			Parity, Carry;				// Flags
-		bool INTE; 						// Interrupt enable flip/flop
+		bool INTE, interruptPending; 	// Interrupt enable flip/flop
+		uint8_t interruptVector;
 		bool STOPPED;					// CPU stopped state, happens if halt instruction happens, only an interrupt resolves it
 		std::array<uint8_t, 256> in;	// input bus
 		std::array<uint8_t, 256> out;	// Output bus

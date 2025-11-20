@@ -80,8 +80,16 @@ void CPU::loadProgram() {
 	// Do nothing
 }
 
+void CPU::requestInterrupt(uint8_t vector) {
+	interruptPending = true;
+	interruptVector = vector;
+}
+
 // Execute a single CPU cycle
 void CPU::cycle() {
+	if (INTE && interruptPending) {
+		// Handle interrupt
+	}
 	// Fetch the opcode
 	uint8_t opcode{ readMem(pc) };
 	// Increment the program counter
