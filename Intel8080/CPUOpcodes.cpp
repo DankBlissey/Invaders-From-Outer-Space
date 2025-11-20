@@ -1051,19 +1051,19 @@ void CPU::pushPSW() {
 }
 
 void CPU::adi() {
-	// Do nothing
+	add(readMem(pc+1));
 }
 
 void CPU::sui() {
-	// Do nothing
+	sub(readMem(pc+1));
 }
 
 void CPU::ani() {
-	// Do nothing
+	ana(readMem(pc+1));
 }
 
 void CPU::ori() {
-	// Do nothing
+	ora(readMem(pc+1));
 }
 
 void CPU::rst0() {
@@ -1176,19 +1176,19 @@ void CPU::call() {
 }
 
 void CPU::aci() {
-	// Do nothing
+	adc(readMem(pc+1));
 }
 
 void CPU::sbi() {
-	// Do nothing
+	sbb(readMem(pc+1));
 }
 
 void CPU::xri() {
-	// Do nothing
+	xra(readMem(pc+1));
 }
 
 void CPU::cpi() {
-	// Do nothing
+	cmp(readMem(pc+1));
 }
 
 // End of opcode functions
