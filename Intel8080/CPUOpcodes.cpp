@@ -161,19 +161,22 @@ void CPU::nop() {
 }
 
 void CPU::lxiB() {
-	// Do nothing
+	B = readMem(pc+2);
+	C = readMem(pc+1);
 }
 
 void CPU::lxiD() {
-	// Do nothing
+	D = readMem(pc+2);
+	E = readMem(pc+1);
 }
 
 void CPU::lxiH() {
-	// Do nothing
+	H = readMem(pc+2);
+	L = readMem(pc+1);
 }
 
 void CPU::lxiSP() {
-	// Do nothing
+	sp = (readMem(pc+2) << 8) | readMem(pc+1);
 }
 
 void CPU::staxB() {

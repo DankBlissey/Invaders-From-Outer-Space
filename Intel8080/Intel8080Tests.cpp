@@ -713,3 +713,25 @@ TEST_CASE("SPHL Load sp from H and L", "[opcodes, regPairInstructions]") {
         REQUIRE(testCpu.getSp() == 0x506C);
     }
 }
+
+TEST_CASE("LXI Load 16 bit value into register pair", "[opcodes, immediateInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        SECTION("Example 1") {
+            testCpu.setMem(0x000, 0x21); // LXI H
+            testCpu.setMem(0x001, 0x03);
+            testCpu.setMem(0x002, 0x01);
+            testCpu.cycle();
+            REQUIRE(testCpu.getPairH() == 0x0103);
+            REQUIRE(testCpu.getPc() == 0x003);
+        }
+        SECTION("Example 2") {
+            testCpu.setMem(0x000, 0x31); // LXI SP
+            testCpu.setMem(0x001, 0xBC);
+            testCpu.setMem(0x002, 0x3A);
+            testCpu.cycle();
+            REQUIRE(testCpu.getSp() == 0x3ABC);
+            REQUIRE(testCpu.getPc() == 0x003);
+        }
+    }
+}
