@@ -1116,7 +1116,7 @@ void CPU::pchl() {
 }
 
 void CPU::sphl() {
-	// Do nothing
+	sp = readPairH();
 }
 
 void CPU::jz() {

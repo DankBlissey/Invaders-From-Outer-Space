@@ -1,5 +1,5 @@
 #include "CPU.h"
-#include "Opcode_Cycles.cpp"
+#include "OpcodeTableValues.cpp"
 
 // Array of function pointers for each opcode
 const CPU::OpFunc CPU::functptr[256] = {

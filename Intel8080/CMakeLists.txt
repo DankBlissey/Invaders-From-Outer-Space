@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (Intel8080 "Intel8080.cpp" "CPU.h" "CPU.cpp" "CPU_Opcodes.cpp" "Opcode_Cycles.cpp")
+add_executable (Intel8080 "Intel8080.cpp" "CPU.h" "CPU.cpp" "CPUOpcodes.cpp" "OpcodeTableValues.cpp")
 
 Include(FetchContent)
 
@@ -15,7 +15,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-add_executable(tests "Intel8080Tests.cpp" "CPU.h" "CPU.cpp" "CPU_Opcodes.cpp" "Opcode_Cycles.cpp" "TestCPU.h" "TestCPU.cpp" "Intel_8080_State.h" "Intel_8080_State.cpp")
+add_executable(tests "Intel8080Tests.cpp" "CPU.h" "CPU.cpp" "CPUOpcodes.cpp" "OpcodeTableValues.cpp" "TestCPU.h" "TestCPU.cpp" "Intel_8080_State.h" "Intel_8080_State.cpp")
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 
 set_property(TARGET Intel8080 PROPERTY CXX_STANDARD 23)

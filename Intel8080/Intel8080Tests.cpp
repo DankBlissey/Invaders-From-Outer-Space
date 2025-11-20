@@ -701,3 +701,15 @@ TEST_CASE("XTHL Exchange stack", "[opcodes, regPairInstructions]") {
         REQUIRE(testCpu.getL() == 0xF0);
     }
 }
+
+TEST_CASE("SPHL Load sp from H and L", "[opcodes, regPairInstructions]") {
+    testCpu.init();
+    SECTION("Manual example") {
+        testCpu.setH(0x50);
+        testCpu.setL(0x6C);
+        testCpu.setMem(0x000, 0xF9); // SPHL
+        testCpu.cycle();
+        REQUIRE(testCpu.getPairH() == 0x506C);
+        REQUIRE(testCpu.getSp() == 0x506C);
+    }
+}
