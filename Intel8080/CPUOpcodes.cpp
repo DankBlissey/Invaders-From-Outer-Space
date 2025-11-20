@@ -165,6 +165,27 @@ uint16_t CPU::readImmediate() {
 	return combineBytes(readMem(pc + 2), readMem(pc + 1));
 }
 
+void CPU::conditionalJump(bool flag) {
+	if (flag) {
+		pc = readImmediate();
+	} else {
+		pc += 3;
+	}
+}
+
+void CPU::callJump() {
+	stackPush(pc + 3);
+	pc = readImmediate();
+}
+
+void CPU::conditionalCallJump(bool flag) {
+	if (flag) {
+		callJump();
+	} else {
+		pc += 3;
+	}
+}
+
 // Specific opcode functions only below here
 
 void CPU::nop() {
@@ -994,35 +1015,19 @@ void CPU::popPSW() {
 }
 
 void CPU::jnz() {
-	if (!Zero) {
-		pc = readImmediate();
-	} else {
-		pc += 3;
-	}
+	conditionalJump(!Zero);
 }
 
 void CPU::jnc() {
-	if (!Carry) {
-		pc = readImmediate();
-	} else {
-		pc += 3;
-	}
+	conditionalJump(!Carry);
 }
 
 void CPU::jpo() {
-	if (!Parity) {
-		pc = readImmediate();
-	} else {
-		pc +=3;
-	}
+	conditionalJump(!Parity);
 }
 
 void CPU::jp() {
-	if (!Sign) {
-		pc = readImmediate();
-	} else {
-		pc += 3;
-	}
+	conditionalJump(!Sign);
 }
 
 void CPU::jmp() {
@@ -1047,19 +1052,19 @@ void CPU::di() {
 }
 
 void CPU::cnz() {
-	// Do nothing
+	conditionalCallJump(!Zero);
 }
 
 void CPU::cnc() {
-	// Do nothing
+	conditionalCallJump(!Carry);
 }
 
 void CPU::cpo() {
-	// Do nothing
+	conditionalCallJump(!Parity);
 }
 
 void CPU::cp() {
-	// Do nothing
+	conditionalCallJump(!Sign);
 }
 
 void CPU::pushB() {
@@ -1155,35 +1160,19 @@ void CPU::sphl() {
 }
 
 void CPU::jz() {
-	if (Zero) {
-		pc = readImmediate();
-	} else {
-		pc += 3;
-	}
+	conditionalJump(Zero);
 }
 
 void CPU::jc() {
-	if (Carry) {
-		pc = readImmediate();
-	} else {
-		pc += 3;
-	}
+	conditionalJump(Carry);
 }
 
 void CPU::jpe() {
-	if (Parity) {
-		pc = readImmediate();
-	} else {
-		pc += 3;
-	}
+	conditionalJump(Parity);
 }
 
 void CPU::jm() {
-	if (Sign) {
-		pc = readImmediate();
-	} else {
-		pc += 3;
-	}
+	conditionalJump(Sign);
 }
 
 void CPU::inFunc() {
@@ -1200,23 +1189,23 @@ void CPU::ei() {
 }
 
 void CPU::cz() {
-	// Do nothing
+	conditionalCallJump(Zero);
 }
 
 void CPU::cc() {
-	// Do nothing
+	conditionalCallJump(Carry);
 }
 
 void CPU::cpe() {
-	// Do nothing
+	conditionalCallJump(Parity);
 }
 
 void CPU::cm() {
-	// Do nothing
+	conditionalCallJump(Sign);
 }
 
 void CPU::call() {
-	// Do nothing
+	callJump();
 }
 
 void CPU::aci() {

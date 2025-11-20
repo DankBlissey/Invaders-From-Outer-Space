@@ -75,6 +75,9 @@ class CPU {
 		void dad(uint16_t);
 		void inx(uint16_t);
 		void mvi(uint8_t&);
+		void conditionalJump(bool);
+		void callJump();
+		void conditionalCallJump(bool);
 
 		// Specific Opcode functions
 		void nop();
