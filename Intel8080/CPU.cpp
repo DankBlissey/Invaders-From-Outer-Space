@@ -32,7 +32,7 @@ CPU::CPU()
 	}
 	// Clear memory
 	clearMem();
-	cycles = 0;
+	extraCycles = 0;
 	B = C = D = E = H = L = A = 0;
 	STOPPED = INTE = Sign = Zero = AuxCarry = Parity = Carry = false;
 }
@@ -43,7 +43,7 @@ CPU::CPU(const CPU& c)
 	sp = c.sp;
 	in = c.in;
 	out = c.out;
-	cycles = c.cycles;
+	extraCycles = c.extraCycles;
 	B = c.B;
 	C = c.C;
 	D = c.D;
@@ -71,7 +71,7 @@ void CPU::init() {
 	}
 	// Clear memory
 	clearMem();
-	cycles = 0;
+	extraCycles = 0;
 	B = C = D = E = H = L = A = 0;
 	STOPPED = INTE = Sign = Zero = AuxCarry = Parity = Carry = false;
 }
@@ -81,23 +81,44 @@ void CPU::loadProgram() {
 }
 
 void CPU::requestInterrupt(uint8_t vector) {
-	interruptPending = true;
-	interruptVector = vector;
+	if (INTE) {
+		interruptPending = true;
+		interruptVector = vector;
+	}
+}
+
+void CPU::stopInterrupt() {
+	interruptPending = false;
 }
 
 // Execute a single CPU cycle
-void CPU::cycle() {
-	if (INTE && interruptPending) {
-		// Handle interrupt
+uint8_t CPU::cycle() {
+	extraCycles = 0;
+	uint8_t opcode;
+	if (interruptPending) {
+		STOPPED = false;
+		// Use the interrupt opcode provided
+		opcode = readMem(interruptVector);
+		// Execute the opcode
+		(this->*functptr[opcode])();
+		// Reset the INTE flip flop
+		interruptPending = false;
+		INTE = false;
+		// pc is not incremented this time (idea is that it will be pushed onto the stack with rst)
+		return opcodeCycles[opcode] + extraCycles;
+	}
+	if (STOPPED) {
+		// CPU is halted, return 4 as clock still continues despite the CPU not doing anything
+		return 4;
 	}
 	// Fetch the opcode
-	uint8_t opcode{ readMem(pc) };
+	opcode = readMem(pc);
 	// Increment the program counter
 	pc += opcodeByteLength[opcode];
 	// Execute the opcode
 	(this->*functptr[opcode])();
-	// Increment the cycle count
-	cycles += opcodeCycles[opcode];
+	// return number of cycles that instruction took
+	return opcodeCycles[opcode] + extraCycles;
 }
 
 
@@ -196,7 +217,7 @@ uint16_t CPU::stackPop() {
 	return pair;
 }
 
-auto CPU::tiedRegisters() const { return std::tie(pc, sp, cycles, B, C, D, E, H, L, A, Sign, Zero, AuxCarry, Parity, Carry); }
+auto CPU::tiedRegisters() const { return std::tie(pc, sp, extraCycles, B, C, D, E, H, L, A, Sign, Zero, AuxCarry, Parity, Carry); }
 
 bool CPU::operator==(CPU const& rhs) const { 
 	return (tiedRegisters() == rhs.tiedRegisters()); 

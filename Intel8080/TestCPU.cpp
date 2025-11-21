@@ -9,8 +9,8 @@ uint16_t TestCPU:: getSp() {
     return sp;
 }
 
-unsigned long TestCPU::getCycles() {
-    return cycles;
+uint8_t TestCPU::getExtraCycles() {
+    return extraCycles;
 }
 
 uint8_t TestCPU::getMem(uint16_t addr) {
@@ -90,8 +90,8 @@ void TestCPU::setSp(uint16_t in) {
     sp = in;
 }
 
-void TestCPU::setCycles(unsigned long in) {
-    cycles = in;
+void TestCPU::setExtraCycles(uint8_t in) {
+    extraCycles = in;
 }
 
 void TestCPU::setMem(uint16_t addr, uint8_t data) {

@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include "Intel_8080_State.h"
+#include "TestCPU.h"
 #include <bit>
 
 TestCPU testCpu = TestCPU();
@@ -9,13 +9,16 @@ TEST_CASE("CMC Complement Carry", "[opcodes, carry]") {
     testCpu.setMem(0x000, 0x3F);
     testCpu.setMem(0x001, 0x3F);
     // Carry begins at 0
-    REQUIRE(Intel_8080_State().with_Carry(0).with_pc(0).stateEquals(testCpu));
+    REQUIRE(testCpu.getCarry() == 0);
+    REQUIRE(testCpu.getPc() == 0);
     testCpu.cycle();
     // CMC flips from 0 to 1
-    REQUIRE(Intel_8080_State().with_Carry(1).with_pc(1).stateEquals(testCpu));
+    REQUIRE(testCpu.getCarry() == 1);
+    REQUIRE(testCpu.getPc() == 1);
     testCpu.cycle();
     // CMC flips back from 1 to 0
-    REQUIRE(Intel_8080_State().with_Carry(0).with_pc(2).stateEquals(testCpu));
+    REQUIRE(testCpu.getCarry() == 0);
+    REQUIRE(testCpu.getPc() == 2);
 }
 
 TEST_CASE("STC Set Carry", "[opcodes, carry]") {
@@ -23,13 +26,16 @@ TEST_CASE("STC Set Carry", "[opcodes, carry]") {
     testCpu.setMem(0x000, 0x37);
     testCpu.setMem(0x001, 0x37);
     // Carry begins at 0
-    REQUIRE(Intel_8080_State().with_Carry(0).with_pc(0).stateEquals(testCpu));
+    REQUIRE(testCpu.getCarry() == 0);
+    REQUIRE(testCpu.getPc() == 0);
     testCpu.cycle();
     // STC sets carry to 1
-    REQUIRE(Intel_8080_State().with_Carry(1).with_pc(1).stateEquals(testCpu));
+    REQUIRE(testCpu.getCarry() == 1);
+    REQUIRE(testCpu.getPc() == 1);
     testCpu.cycle();
     // STC does nothing, carry is already at 1
-    REQUIRE(Intel_8080_State().with_Carry(1).with_pc(2).stateEquals(testCpu));
+    REQUIRE(testCpu.getCarry() == 1);
+    REQUIRE(testCpu.getPc() == 2);
 }
 
 // Zero, Sign, Parity, AuxCarry flags affected
@@ -49,7 +55,13 @@ TEST_CASE("INR Increment Register or Memory (values)", "[opcodes, singleRegInstr
             for (int i = 0; i < 7; i++) {
                 testCpu.cycle();
             }
-            REQUIRE(Intel_8080_State().with_B(35).with_C(35).with_D(35).with_E(35).with_H(35).with_L(35).with_A(35).stateEquals(testCpu));
+            REQUIRE(testCpu.getB() == 35);
+            REQUIRE(testCpu.getC() == 35);
+            REQUIRE(testCpu.getD() == 35);
+            REQUIRE(testCpu.getE() == 35);
+            REQUIRE(testCpu.getH() == 35);
+            REQUIRE(testCpu.getL() == 35);
+            REQUIRE(testCpu.getA() == 35);
         }
         SECTION("INR correctly increments negative numbers") {
 
@@ -60,7 +72,13 @@ TEST_CASE("INR Increment Register or Memory (values)", "[opcodes, singleRegInstr
             }
             int8_t inrNegative = -11;
             uint8_t inrConverted= std::bit_cast<uint8_t>(inrNegative);
-            REQUIRE(Intel_8080_State().with_B(inrConverted).with_C(inrConverted).with_D(inrConverted).with_E(inrConverted).with_H(inrConverted).with_L(inrConverted).with_A(inrConverted).stateEquals(testCpu));
+            REQUIRE(testCpu.getB() == inrConverted);
+            REQUIRE(testCpu.getC() == inrConverted);
+            REQUIRE(testCpu.getD() == inrConverted);
+            REQUIRE(testCpu.getE() == inrConverted);
+            REQUIRE(testCpu.getH() == inrConverted);
+            REQUIRE(testCpu.getL() == inrConverted);
+            REQUIRE(testCpu.getA() == inrConverted);
         }
         SECTION("INR correctly overflows") {
             int8_t maxNegative = -1;
@@ -69,7 +87,13 @@ TEST_CASE("INR Increment Register or Memory (values)", "[opcodes, singleRegInstr
             for (int i = 0; i < 7; i++) {
                 testCpu.cycle();
             }
-            REQUIRE(Intel_8080_State().with_B(0).with_C(0).with_D(0).with_E(0).with_H(0).with_L(0).with_A(0).stateEquals(testCpu));
+            REQUIRE(testCpu.getB() == 0);
+            REQUIRE(testCpu.getC() == 0);
+            REQUIRE(testCpu.getD() == 0);
+            REQUIRE(testCpu.getE() == 0);
+            REQUIRE(testCpu.getH() == 0);
+            REQUIRE(testCpu.getL() == 0);
+            REQUIRE(testCpu.getA() == 0);
         }
     }
     SECTION("INR on memory location") {
@@ -157,7 +181,13 @@ TEST_CASE("DCR Decrement Register or Memory (values)", "[opcodes, singleRegInstr
             for (int i = 0; i < 7; i++) {
                 testCpu.cycle();
             }
-            REQUIRE(Intel_8080_State().with_B(33).with_C(33).with_D(33).with_E(33).with_H(33).with_L(33).with_A(33).stateEquals(testCpu));
+            REQUIRE(testCpu.getB() == 33);
+            REQUIRE(testCpu.getC() == 33);
+            REQUIRE(testCpu.getD() == 33);
+            REQUIRE(testCpu.getE() == 33);
+            REQUIRE(testCpu.getH() == 33);
+            REQUIRE(testCpu.getL() == 33);
+            REQUIRE(testCpu.getA() == 33);
         }
     }
     SECTION("DCR on memory") {
@@ -285,7 +315,13 @@ TEST_CASE("MOV Move data from one register or memory location to another", "[opc
         for (int i = 0; i < 6; i++) {
             testCpu.cycle();
         }
-        REQUIRE(Intel_8080_State().with_B(testValue).with_C(testValue).with_D(testValue).with_E(testValue).with_H(testValue).with_L(testValue).with_A(testValue).stateEquals(testCpu));
+        REQUIRE(testCpu.getB() == testValue);
+        REQUIRE(testCpu.getC() == testValue);
+        REQUIRE(testCpu.getD() == testValue);
+        REQUIRE(testCpu.getE() == testValue);
+        REQUIRE(testCpu.getH() == testValue);
+        REQUIRE(testCpu.getL() == testValue);
+        REQUIRE(testCpu.getA() == testValue);
     }
     SECTION("Copy from register to mem") {
         testCpu.setB(0x3D);
@@ -441,7 +477,9 @@ TEST_CASE("XRA Logical exclusive-or register or memory with accumulator", "[opco
         for (int i = 0; i < 3; i++) {
             testCpu.cycle();
         }
-        REQUIRE(Intel_8080_State().with_A(0).with_B(0).with_C(0).stateEquals(testCpu));
+        REQUIRE(testCpu.getB() == 0);
+        REQUIRE(testCpu.getC() == 0);
+        REQUIRE(testCpu.getA() == 0);
     }
     SECTION("Manual example 2") {
         uint8_t value {0xA4};

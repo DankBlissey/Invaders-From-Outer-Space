@@ -178,6 +178,7 @@ void CPU::callJump() {
 
 void CPU::conditionalCallJump(bool flag) {
 	if (flag) {
+		extraCycles = 6;
 		callJump();
 	}
 }
@@ -188,6 +189,7 @@ void CPU::returnFromCall() {
 
 void CPU::conditionalReturnFromCall(bool flag) {
 	if (flag) {
+		extraCycles = 6;
 		returnFromCall();
 	}
 }

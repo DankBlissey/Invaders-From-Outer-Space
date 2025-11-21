@@ -6,7 +6,7 @@ class TestCPU: public CPU {
         friend struct Intel_8080_State;
         uint16_t getPc();
         uint16_t getSp();
-        unsigned long getCycles();
+        uint8_t getExtraCycles();
 
         uint8_t getMem(uint16_t);
 
@@ -31,7 +31,7 @@ class TestCPU: public CPU {
 
         void setPc(uint16_t);
         void setSp(uint16_t);
-        void setCycles(unsigned long);
+        void setExtraCycles(uint8_t);
 
         void setMem(uint16_t, uint8_t);
 

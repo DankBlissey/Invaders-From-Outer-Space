@@ -14,7 +14,7 @@ class CPU {
 		CPU(const CPU&);
 		void init();
 
-		void cycle();					// CPU emulation cycle
+		uint8_t cycle();					// CPU emulation cycle
 
 		void loadProgram(); // Load a program into memory
 
@@ -23,6 +23,8 @@ class CPU {
 		uint8_t readOut(uint8_t);
 
 		void requestInterrupt(uint8_t);
+
+		void stopInterrupt();
 
 		bool operator==(CPU const&) const; // Overwrite == operator to compare the registers of the cpu
 
@@ -49,7 +51,6 @@ class CPU {
 
 		uint16_t pc;					// Program counter
 		uint16_t sp;					// Stack pointer
-		unsigned long cycles;			// Number of completed cycles
 		std::unique_ptr<std::array<uint8_t, 65536>> mem; // 64KB of memory (allocated to heap with unique pointer)
 		uint8_t B, C, D, E, H, L, A;	// General purpose registers
 		bool Sign, Zero, AuxCarry, 
@@ -62,6 +63,8 @@ class CPU {
 
 		using OpFunc = void (CPU::*)();
 		static const OpFunc functptr[256];
+
+		uint8_t extraCycles;			// Extra cycles for when conditional branches do an action
 
 		uint16_t readImmediate();
 
