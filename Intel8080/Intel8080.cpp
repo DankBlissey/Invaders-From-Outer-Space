@@ -85,7 +85,7 @@ bool runTest(CPU& cpu, const string& file, unsigned long expectedCycles) {
 	while(!cpu.halted()) {
 		instructions++;
 		cycles += cpu.cycle();
-		//std::cout << static_cast<char>(cpu.readOut(0));
+		std::cout << static_cast<char>(cpu.readOut(0));
 	}
 	std::cout << "Test finished, cycles completed: " << std::dec << cycles << ", expected cycles: " << expectedCycles << "\n";
 	return true;
@@ -93,9 +93,9 @@ bool runTest(CPU& cpu, const string& file, unsigned long expectedCycles) {
 
 int main()
 {
-	TestCPU cpu = TestCPU();
-	//CPU cpu = CPU();
-	//runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/TST8080.COM", 4924);
+	//TestCPU cpu = TestCPU();
+	CPU cpu = CPU();
+	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/TST8080.COM", 4924);
 	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/8080PRE.COM", 7817);
 	return 0;
 }
