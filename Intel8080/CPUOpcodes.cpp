@@ -33,6 +33,11 @@ static bool calculateAuxCarryADD(uint8_t a, uint8_t b) {
 	return ((a & 0x0F) + (b & 0x0F)) > 0x0F;
 }
 
+static bool calculateAuxCarrySUB(uint8_t a, uint8_t b) {
+	uint8_t result = a + b;
+	return ~(a ^ result ^ b) & 0x10;
+}
+
 static bool calculateCarryADD(uint8_t a, uint8_t b) {
 	return (uint16_t)a + (uint16_t)b > 0xFF;
 }

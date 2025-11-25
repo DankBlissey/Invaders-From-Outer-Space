@@ -36,7 +36,7 @@ CPU::CPU(uint16_t programCounter) : pc(programCounter) {}
 // Initialise the CPU
 void CPU::init() {
 	pc = 0;
-	sp = 0xFFFF;
+	sp = 0;
 	// clear input and output buses
 	for (int i = 0; i < 256; ++i) {
 		in[i] = 0;
@@ -50,9 +50,10 @@ void CPU::init() {
 	interruptVector = 0;
 }
 
-void CPU::init(uint16_t programCounter) {
+void CPU::init(uint16_t programCounter, uint16_t stackPointer) {
 	init();
 	pc = programCounter;
+	sp = stackPointer;
 }
 
 void CPU::reset() {
@@ -75,31 +76,30 @@ void CPU::stopInterrupt() {
 // Execute a single CPU cycle
 uint8_t CPU::cycle() {
 	extraCycles = 0;
-	uint8_t opcode;
 	if (interruptPending) {
 		// Use the interrupt opcode provided
-		opcode = readMem(interruptVector);
+		currentInstruction = readMem(interruptVector);
 		// Execute the opcode
-		(this->*functptr[opcode])();
+		(this->*functptr[currentInstruction])();
 		// Reset the INTE flip flop
 		interruptPending = false;
 		INTE = false;
 		interruptVector = 0x00;
 		// pc is not incremented this time (idea is that it will be pushed onto the stack with rst)
-		return opcodeCycles[opcode] + extraCycles;
+		return opcodeCycles[currentInstruction] + extraCycles;
 	}
 	if (STOPPED) {
 		// CPU is halted, return 4 as clock still continues despite the CPU not doing anything
 		return 4;
 	}
 	// Fetch the opcode
-	opcode = readMem(pc);
+	currentInstruction = readMem(pc);
 	// Increment the program counter
-	pc += opcodeByteLength[opcode];
+	pc += opcodeByteLength[currentInstruction];
 	// Execute the opcode
-	(this->*functptr[opcode])();
+	(this->*functptr[currentInstruction])();
 	// return number of cycles that instruction took
-	return opcodeCycles[opcode] + extraCycles;
+	return opcodeCycles[currentInstruction] + extraCycles;
 }
 
 bool CPU::halted() {

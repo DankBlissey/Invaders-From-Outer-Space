@@ -75,7 +75,7 @@ void loadTestHandler(CPU& cpu) {
 
 bool runTest(CPU& cpu, const string& file, unsigned long expectedCycles) {
 	std::cout << "TEST: " << file << "\n";
-	cpu.init(0x0100);
+	cpu.init(0x0100, 0xFFFF);
 	if (!loadROM(cpu, file, 0x0100)) {
 		return false;
 	}

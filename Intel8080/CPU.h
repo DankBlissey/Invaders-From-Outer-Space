@@ -14,7 +14,7 @@ class CPU {
 		CPU(const CPU&);
 		CPU(uint16_t);
 		void init(); // Initialize
-		void init(uint16_t); // Initialize with starting program counter
+		void init(uint16_t, uint16_t); // Initialize with starting program counter
 
 		void reset(); // Intel 8080 reset
 
@@ -56,8 +56,10 @@ class CPU {
 
 		auto tiedRegisters() const;
 
+		uint8_t currentInstruction;
+
 		uint16_t pc {0};					// Program counter
-		uint16_t sp = {0xFFFF};					// Stack pointer
+		uint16_t sp = {0};					// Stack pointer
 		std::unique_ptr<std::array<uint8_t, 65536>> mem = std::make_unique<std::array<uint8_t, 65536>>(); // 64KB of memory (allocated to heap with unique pointer)
 		uint8_t B {0}, C {0}, D {0}, E {0}, H {0}, L {0}, A {0};	// General purpose registers
 		bool Sign {false}, Zero {false}, AuxCarry {false}, 

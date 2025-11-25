@@ -1,16 +1,19 @@
 #pragma once
 #include "CPU.h"
+#include<iostream>
+#include <optional>
 
 class TestCPU: public CPU {
     public:
         friend struct Intel_8080_State;
+        friend std::ostream& operator <<(std::ostream&, const TestCPU&);
         uint16_t getPc();
         uint16_t getSp();
         uint8_t getExtraCycles();
 
-        uint8_t cycle();
-
         uint8_t getMem(uint16_t);
+
+        uint8_t cycle();
 
         uint16_t getPairB();
         uint16_t getPairD();
@@ -57,4 +60,7 @@ class TestCPU: public CPU {
         void setAuxCarry(bool);
         void setParity(bool);
         void setCarry(bool);
+
+        std::optional<uint8_t> instructionSecondByte;
+        std::optional<uint8_t> instructionThirdByte;
 };

@@ -1,5 +1,6 @@
 #include "TestCPU.h"
 #include <iostream>
+#include "OpcodeTableValues.cpp"
 
 // Getter functions
 uint16_t TestCPU:: getPc() {
@@ -14,16 +15,36 @@ uint8_t TestCPU::getExtraCycles() {
     return extraCycles;
 }
 
-uint8_t TestCPU::cycle() {
-    std::cout << "--------------------CPU State --------------------------\n";
-    std::cout << "PC: " << std::hex << static_cast<int>(pc) << ", SP: " << std::hex << static_cast<int>(sp) << "\n";
-    std::cout << "Current instruction: " << std::hex << static_cast<int>(readMem(pc)) << "\n";
-    std::cout << "Registers: BC: " << std::hex << static_cast<int>(getPairB()) << "\n";
-    std::cout << "Registers: DE: " << std::hex << static_cast<int>(getPairD()) << "\n";
-    std::cout << "Registers: HL: " << std::hex << static_cast<int>(getPairH()) << "\n";
-    std::cout << "Accumulator: " << std::hex << static_cast<int>(getA()) << "\n";
-    std::cout << "Carry: " << Carry << ", AuxCarry: " << AuxCarry << ", Sign: " << Sign << ", Parity: " << Parity << ", Zero: " << Zero << "\n";
-    return CPU::cycle();
+std::ostream& operator<<(std::ostream& os, const TestCPU& cpu) {
+    os << "-------------------------CPU State --------------------------\n"
+        << "PC: " << std::hex << static_cast<int>(cpu.pc) << ", SP: " << std::hex << static_cast<int>(cpu.sp) << "\n"
+        << "Next Instruction: " << std::hex << static_cast<int>((*cpu.mem)[cpu.pc]) << "\n"
+        << "Instruction done: Opcode: " << std::hex << static_cast<int>(cpu.currentInstruction) << ", Operand bytes: ";
+    if (cpu.instructionSecondByte.has_value()) {
+        os << static_cast<int>(cpu.instructionSecondByte.value());
+    } else {
+        os << "Nothing";
+    }
+    os << ", ";
+    if (cpu.instructionThirdByte.has_value()) {
+        os << static_cast<int>(cpu.instructionThirdByte.value());
+    } else {
+        os << "Nothing";
+    }
+    os << "\n";
+    os  << "Register B: " << std::hex << static_cast<int>(cpu.B) << "\n"
+        << "Register C: " << std::hex << static_cast<int>(cpu.C) << "\n"
+        << "Register D: " << std::hex << static_cast<int>(cpu.D) << "\n"
+        << "Register E: " << std::hex << static_cast<int>(cpu.E) << "\n"
+        << "Register H: " << std::hex << static_cast<int>(cpu.H) << "\n"
+        << "Register L: " << std::hex << static_cast<int>(cpu.L) << "\n"
+        << "Accumulator: " << std::hex << static_cast<int>(cpu.A) << "\n"
+        << "Carry: " << std::hex << static_cast<int>(cpu.Carry) << "\n"
+        << "AuxCarry: " << std::hex << static_cast<int>(cpu.AuxCarry) << "\n"
+        << "Sign: " << std::hex << static_cast<int>(cpu.Sign) << "\n"
+        << "Parity: " << std::hex << static_cast<int>(cpu.Parity) << "\n"
+        << "Zero: " << std::hex << static_cast<int>(cpu.Zero) << "\n";
+    return os;
 }
 
 uint8_t TestCPU::getMem(uint16_t addr) {
@@ -183,4 +204,24 @@ void TestCPU::setAllReg(uint8_t in) {
     setH(in);
     setL(in);
     setA(in);
+}
+
+
+uint8_t TestCPU::cycle() {
+    uint8_t cycles = CPU::cycle();
+    switch(opcodeByteLength[currentInstruction]) {
+        case 1:
+            instructionSecondByte.reset();
+            instructionThirdByte.reset();
+            break;
+        case 2:
+            instructionSecondByte = readMem(pc-1);
+            instructionThirdByte.reset();
+            break;
+        case 3:
+            instructionSecondByte = readMem(pc-2);
+            instructionThirdByte = readMem(pc-1);
+            break;
+    }
+    return cycles;
 }
