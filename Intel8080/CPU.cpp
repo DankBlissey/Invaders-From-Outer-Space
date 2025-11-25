@@ -36,7 +36,7 @@ CPU::CPU(uint16_t programCounter) : pc(programCounter) {}
 // Initialise the CPU
 void CPU::init() {
 	pc = 0;
-	sp = 0;
+	sp = 0xFFFF;
 	// clear input and output buses
 	for (int i = 0; i < 256; ++i) {
 		in[i] = 0;

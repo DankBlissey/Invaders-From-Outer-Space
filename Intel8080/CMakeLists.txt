@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (Intel8080 "Intel8080.cpp" "CPU.h" "CPU.cpp" "CPUOpcodes.cpp" "OpcodeTableValues.cpp")
+add_executable (Intel8080 "Intel8080.cpp" "CPU.h" "CPU.cpp" "CPUOpcodes.cpp" "OpcodeTableValues.cpp" "TestCPU.h" "TestCPU.cpp")
 
 Include(FetchContent)
 

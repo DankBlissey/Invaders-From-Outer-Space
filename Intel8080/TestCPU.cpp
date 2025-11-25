@@ -1,4 +1,5 @@
 #include "TestCPU.h"
+#include <iostream>
 
 // Getter functions
 uint16_t TestCPU:: getPc() {
@@ -11,6 +12,18 @@ uint16_t TestCPU:: getSp() {
 
 uint8_t TestCPU::getExtraCycles() {
     return extraCycles;
+}
+
+uint8_t TestCPU::cycle() {
+    std::cout << "--------------------CPU State --------------------------\n";
+    std::cout << "PC: " << std::hex << static_cast<int>(pc) << ", SP: " << std::hex << static_cast<int>(sp) << "\n";
+    std::cout << "Current instruction: " << std::hex << static_cast<int>(readMem(pc)) << "\n";
+    std::cout << "Registers: BC: " << std::hex << static_cast<int>(getPairB()) << "\n";
+    std::cout << "Registers: DE: " << std::hex << static_cast<int>(getPairD()) << "\n";
+    std::cout << "Registers: HL: " << std::hex << static_cast<int>(getPairH()) << "\n";
+    std::cout << "Accumulator: " << std::hex << static_cast<int>(getA()) << "\n";
+    std::cout << "Carry: " << Carry << ", AuxCarry: " << AuxCarry << ", Sign: " << Sign << ", Parity: " << Parity << ", Zero: " << Zero << "\n";
+    return CPU::cycle();
 }
 
 uint8_t TestCPU::getMem(uint16_t addr) {

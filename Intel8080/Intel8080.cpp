@@ -1,4 +1,4 @@
-﻿#include "CPU.h"
+﻿#include "TestCPU.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,14 +7,16 @@ using std::string;
 
 bool loadROM(CPU& cpu, const string& fileName, size_t startAddress = 0) {
 	std::ifstream romFile(fileName, std::ios::binary | std::ios::ate);
+	size_t memorySize = cpu.getMemSize();
 	if(!romFile.is_open()) {
 		std::cerr << "Error: cannot open ROM file " << fileName << "\n";
 		return false;
 	}
 	std::streamsize size = romFile.tellg();
 	romFile.seekg(0, std::ios::beg);
+	std::cout << "Start Address: " << startAddress << ", size: " << size << "\n";
 
-	if (startAddress + size > cpu.getMemSize()) {
+	if (startAddress + size > memorySize) {
 		std::cerr << "Error: ROM too large to fit in memory\n";
 		return false;
 	}
@@ -34,7 +36,7 @@ bool loadROM(CPU& cpu, const string& fileName, size_t startAddress = 0) {
 
 
 void loadTestHandler(CPU& cpu) {
-	// Write 10 to output 0 and halt to exit program
+	// Write newLine to output 0 and halt to exit program
 	cpu.writeMem(0x0000, 0x3E); // MVI A, 0x0A : exit:
 	cpu.writeMem(0x0001, 0x0A);
 	cpu.writeMem(0x0002, 0xD3); // OUT 0
@@ -71,17 +73,29 @@ void loadTestHandler(CPU& cpu) {
 	cpu.writeMem(0x001C, 0x00);
 }
 
-int main()
-{
-	CPU cpu = CPU(0x0100);
+bool runTest(CPU& cpu, const string& file, unsigned long expectedCycles) {
+	std::cout << "TEST: " << file << "\n";
 	cpu.init(0x0100);
-	if (!loadROM(cpu, "CPU-Test-ROMs/8080EXER.COM", 0x0100)) {
-		return 1;
+	if (!loadROM(cpu, file, 0x0100)) {
+		return false;
 	}
+	unsigned long cycles {0};
+	unsigned long instructions {0};
 	loadTestHandler(cpu);
 	while(!cpu.halted()) {
-		cpu.cycle();
-		std::cout << static_cast<char>(cpu.readOut(0));
+		instructions++;
+		cycles += cpu.cycle();
+		//std::cout << static_cast<char>(cpu.readOut(0));
 	}
+	std::cout << "Test finished, cycles completed: " << std::dec << cycles << ", expected cycles: " << expectedCycles << "\n";
+	return true;
+}
+
+int main()
+{
+	TestCPU cpu = TestCPU();
+	//CPU cpu = CPU();
+	//runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/TST8080.COM", 4924);
+	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/8080PRE.COM", 7817);
 	return 0;
 }

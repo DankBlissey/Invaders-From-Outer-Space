@@ -8,6 +8,8 @@ class TestCPU: public CPU {
         uint16_t getSp();
         uint8_t getExtraCycles();
 
+        uint8_t cycle();
+
         uint8_t getMem(uint16_t);
 
         uint16_t getPairB();
