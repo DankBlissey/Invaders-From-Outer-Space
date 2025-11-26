@@ -14,7 +14,7 @@ bool loadROM(CPU& cpu, const string& fileName, size_t startAddress = 0) {
 	}
 	std::streamsize size = romFile.tellg();
 	romFile.seekg(0, std::ios::beg);
-	std::cout << "Start Address: " << startAddress << ", size: " << size << "\n";
+	//std::cout << "Start Address: " << startAddress << ", size: " << size << "\n";
 
 	if (startAddress + size > memorySize) {
 		std::cerr << "Error: ROM too large to fit in memory\n";
@@ -73,6 +73,15 @@ void loadTestHandler(CPU& cpu) {
 	cpu.writeMem(0x001C, 0x00);
 }
 
+void loadTestHandlerAlt(CPU& cpu) {
+    cpu.writeMem(0x0000, 0xD3);
+    cpu.writeMem(0x0001, 0x00);
+
+    cpu.writeMem(0x0005, 0xD3);
+    cpu.writeMem(0x0006, 0x01);
+    cpu.writeMem(0x0007, 0xC9);
+}
+
 bool runTest(CPU& cpu, const string& file, unsigned long expectedCycles) {
 	std::cout << "TEST: " << file << "\n";
 	cpu.init(0x0100, 0xFFFF);
@@ -87,7 +96,7 @@ bool runTest(CPU& cpu, const string& file, unsigned long expectedCycles) {
 		cycles += cpu.cycle();
 		std::cout << static_cast<char>(cpu.readOut(0));
 	}
-	std::cout << "Test finished, cycles completed: " << std::dec << cycles << ", expected cycles: " << expectedCycles << "\n";
+	std::cout << "Test finished, cycles completed: " << std::dec << cycles << "\n";
 	return true;
 }
 
@@ -95,7 +104,9 @@ int main()
 {
 	//TestCPU cpu = TestCPU();
 	CPU cpu = CPU();
+	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/CPUTEST2.COM", 255653383LU);
 	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/TST8080.COM", 4924);
 	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/8080PRE.COM", 7817);
+	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/8080EXM.COM", 7817);
 	return 0;
 }

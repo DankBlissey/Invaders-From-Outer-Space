@@ -38,6 +38,8 @@ class CPU {
 
 		bool operator==(CPU const&) const; // Overwrite == operator to compare the registers of the cpu
 
+		CPU& operator=(const CPU&);
+
 	protected:
 		uint8_t readIn(uint8_t);
 		void writeOut(uint8_t, uint8_t);

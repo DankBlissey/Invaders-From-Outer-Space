@@ -87,11 +87,12 @@ void CPU::add(uint8_t reg) {
 }
 
 void CPU::adc(uint8_t reg) {
-	if (Carry) {
+	uint8_t oldReg {reg};
+	if(Carry) {
 		reg++;
 	}
-	AuxCarry = calculateAuxCarryADD(A, reg);
-	Carry = calculateCarryADD(A, reg);
+	AuxCarry = calculateAuxCarryADD(A, oldReg, Carry);
+	Carry = calculateCarryADD(A, oldReg, Carry);
 	A += reg;
 	Parity = checkParity(A);
 	Zero = checkZero(A);
@@ -109,12 +110,13 @@ void CPU::sub(uint8_t reg) {
 }
 
 void CPU::sbb(uint8_t reg) {
+	uint8_t oldReg {reg};
 	if (Carry) {
 		reg++;
 	}
 	reg = ~reg;
-	AuxCarry = calculateAuxCarryADD(A, reg, 1);
-	Carry = !calculateCarryADD(A, reg, 1);
+	AuxCarry = calculateAuxCarryADD(A, ~oldReg, !Carry);
+	Carry = !calculateCarryADD(A, ~oldReg, !Carry);
 	A += reg + 1;
 	Parity = checkParity(A);
 	Zero = checkZero(A);
@@ -347,16 +349,17 @@ void CPU::ral() {
 }
 
 void CPU::daa() {
-	bool oldCarry = Carry;
+	bool oldCarry {Carry};
 	if ((A & 0x0F) > 9 || AuxCarry) {
 		uint8_t oldA{ A };
 		A += 0x06;
 		AuxCarry = calculateAuxCarryADD(oldA, 0x06);
+		Carry = calculateCarryADD(oldA, 0x06);
 	}
-	if ((A & 0xF0) > 0x90 || Carry) {
+	if ((A & 0xF0) > 0x90 || Carry || oldCarry) {
 		uint8_t oldA{ A };
 		A += 0x60;
-		Carry = (calculateCarryADD(oldA, 0x60) || oldCarry);
+		Carry = (calculateCarryADD(oldA, 0x60) || oldCarry || Carry);
 	}
 	Parity = checkParity(A);
 	Zero = (A == 0);

@@ -1,6 +1,5 @@
 #include "CPU.h"
 #include "OpcodeTableValues.cpp"
-#include <iostream>
 
 // Array of function pointers for each opcode
 const CPU::OpFunc CPU::functptr[256] = {
@@ -94,16 +93,16 @@ uint8_t CPU::cycle() {
 		return 4;
 	}
 	// Fetch the opcode
-	std::cout << "Fetching" << "\n";
+	//std::cout << "Fetching" << "\n";
 	currentInstruction = readMem(pc);
 	// Increment the program counter
-	std::cout << "Incrementing" << "\n";
+	//std::cout << "Incrementing" << "\n";
 	pc += opcodeByteLength[currentInstruction];
 	// Execute the opcode
-	std::cout << "Executing current instruction: " << std::hex << static_cast<int>(currentInstruction) << "\n";
+	//std::cout << "Executing current instruction: " << std::hex << static_cast<int>(currentInstruction) << "\n";
 	(this->*functptr[currentInstruction])();
 	// return number of cycles that instruction took
-	std::cout << "Returning cycles" << "\n";
+	//std::cout << "Returning cycles" << "\n";
 	return opcodeCycles[currentInstruction] + extraCycles;
 }
 
