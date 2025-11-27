@@ -20,7 +20,7 @@ class CPU {
 
 		void clearMem();
 		uint8_t readMem(uint16_t);
-		void writeMem(uint16_t, uint8_t);
+		virtual void writeMem(uint16_t, uint8_t);
 
 		size_t getMemSize() const;
 
@@ -42,7 +42,7 @@ class CPU {
 
 	protected:
 		uint8_t readIn(uint8_t);
-		void writeOut(uint8_t, uint8_t);
+		virtual void writeOut(uint8_t, uint8_t);
 
 		void writePairB(uint16_t);
 		uint16_t readPairB();

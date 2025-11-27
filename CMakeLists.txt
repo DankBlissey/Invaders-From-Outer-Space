@@ -19,6 +19,8 @@ enable_testing()
 # Include sub-projects.
 add_subdirectory ("Intel8080")
 
+add_subdirectory ("Space-Invaders-Hardware")
+
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if (MSVC)
