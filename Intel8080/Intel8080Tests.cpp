@@ -212,7 +212,7 @@ TEST_CASE("DCR Decrement Register or Memory (flags)", "[opcodes, singleRegInstru
         REQUIRE(testCpu.getZero() == false);
         REQUIRE(testCpu.getSign() == false);
         REQUIRE(testCpu.getParity() == false);
-        REQUIRE(testCpu.getAuxCarry() == true);
+        REQUIRE(testCpu.getAuxCarry() == false);
     }
     SECTION("Case 2: 1 -> 0") {
         testCpu.setB(1);
@@ -221,7 +221,7 @@ TEST_CASE("DCR Decrement Register or Memory (flags)", "[opcodes, singleRegInstru
         REQUIRE(testCpu.getZero() == true);
         REQUIRE(testCpu.getSign() == false);
         REQUIRE(testCpu.getParity() == true);
-        REQUIRE(testCpu.getAuxCarry() == false);
+        REQUIRE(testCpu.getAuxCarry() == true);
     }
     SECTION("Case 3: 0 -> -1") {
         testCpu.setB(0);
@@ -231,7 +231,7 @@ TEST_CASE("DCR Decrement Register or Memory (flags)", "[opcodes, singleRegInstru
         REQUIRE(testCpu.getZero() == false);
         REQUIRE(testCpu.getSign() == true);
         REQUIRE(testCpu.getParity() == true);
-        REQUIRE(testCpu.getAuxCarry() == true);
+        REQUIRE(testCpu.getAuxCarry() == false);
     }
 }
 

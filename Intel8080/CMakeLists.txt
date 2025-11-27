@@ -2,6 +2,10 @@
 # project specific logic here.
 #
 
+# Copy the ROMs folder to the binary directory
+file(COPY ${CMAKE_SOURCE_DIR}/Intel8080/CPU-Test-ROMs
+     DESTINATION ${CMAKE_BINARY_DIR}/Intel8080)
+
 # Add source to this project's executable.
 add_executable (Intel8080 "Intel8080.cpp" "CPU.h" "CPU.cpp" "CPUOpcodes.cpp" "OpcodeTableValues.cpp" "TestCPU.h" "TestCPU.cpp")
 

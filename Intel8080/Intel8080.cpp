@@ -14,7 +14,6 @@ bool loadROM(CPU& cpu, const string& fileName, size_t startAddress = 0) {
 	}
 	std::streamsize size = romFile.tellg();
 	romFile.seekg(0, std::ios::beg);
-	//std::cout << "Start Address: " << startAddress << ", size: " << size << "\n";
 
 	if (startAddress + size > memorySize) {
 		std::cerr << "Error: ROM too large to fit in memory\n";
@@ -34,7 +33,7 @@ bool loadROM(CPU& cpu, const string& fileName, size_t startAddress = 0) {
 	return true;
 }
 
-
+// Handler for tests which typically run on CP/M, adds handling for exiting the program and for output of chars to the output bus
 void loadTestHandler(CPU& cpu) {
 	// Write newLine to output 0 and halt to exit program
 	cpu.writeMem(0x0000, 0x3E); // MVI A, 0x0A : exit:
@@ -73,15 +72,6 @@ void loadTestHandler(CPU& cpu) {
 	cpu.writeMem(0x001C, 0x00);
 }
 
-void loadTestHandlerAlt(CPU& cpu) {
-    cpu.writeMem(0x0000, 0xD3);
-    cpu.writeMem(0x0001, 0x00);
-
-    cpu.writeMem(0x0005, 0xD3);
-    cpu.writeMem(0x0006, 0x01);
-    cpu.writeMem(0x0007, 0xC9);
-}
-
 bool runTest(CPU& cpu, const string& file) {
 	std::cout << "TEST: " << file << "\n\n";
 	cpu.init(0x0100, 0xFFFF);
@@ -95,20 +85,20 @@ bool runTest(CPU& cpu, const string& file) {
 		instructions++;
 		cycles += cpu.cycle();
 		uint8_t output {cpu.readOut(0)};
-		if (output > 0) {
+		if (output != 0) {
 			std::cout << static_cast<char>(output);
 		}
 	}
-	std::cout << "Test finished, cycles completed: " << std::dec << cycles << "\n\n";
+	//std::cout << "\n" << "Test finished, cycles completed: " << std::dec << cycles << "\n\n";
 	return true;
 }
 
 int main()
 {
 	CPU cpu = CPU();
-	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/CPUTEST2.COM");
-	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/TST8080.COM");
-	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/8080PRE.COM");
-	runTest(cpu, "/home/john/Development/Projects/Space-Invaders/Intel8080/CPU-Test-ROMs/8080EXM.COM");
+	runTest(cpu, "CPU-Test-ROMs/CPUTEST.COM");
+	runTest(cpu, "CPU-Test-ROMs/TST8080.COM");
+	runTest(cpu, "CPU-Test-ROMs/8080PRE.COM");
+	runTest(cpu, "CPU-Test-ROMs/8080EXM.COM");
 	return 0;
 }
