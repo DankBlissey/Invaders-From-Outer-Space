@@ -1,6 +1,7 @@
-#include "../CPU.h"
+#include "../Intel8080/CPU.h"
 #include "SpaceInvadersMemory.h"
 #include "ShiftRegister.h"
+#include <SDL3/SDL.h>
 
 // Class representing all the hardware for space invaders
 class Hardware {

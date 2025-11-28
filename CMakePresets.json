@@ -13,6 +13,7 @@
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "installDir": "${sourceDir}/out/install/${presetName}",
             "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             },
             "condition": {
@@ -68,6 +69,7 @@
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "installDir": "${sourceDir}/out/install/${presetName}",
             "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             },
             "condition": {
