@@ -165,7 +165,7 @@ void CPU::mvi(uint8_t& reg) {
 	reg = readMem(pc-1);
 }
 
-uint16_t CPU::readImmediate() {
+uint16_t CPU::readImmediate() const {
 	return combineBytes(readMem(pc - 1), readMem(pc - 2));
 }
 

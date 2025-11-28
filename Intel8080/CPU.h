@@ -23,7 +23,7 @@ class CPU {
 		uint8_t readMem(uint16_t) const;
 		void writeMem(uint16_t, uint8_t);
 		void clearMem();
-		size_t getMemSize();
+		size_t getMemSize() const;
 
 		bool halted();
 
@@ -42,18 +42,16 @@ class CPU {
 		void writeOut(uint8_t, uint8_t);
 
 		void writePairB(uint16_t);
-		uint16_t readPairB();
+		uint16_t readPairB() const;
 		void writePairD(uint16_t);
-		uint16_t readPairD();
+		uint16_t readPairD() const;
 		void writePairH(uint16_t);
-		uint16_t readPairH();
+		uint16_t readPairH() const;
 		void writePairPSW(uint16_t);
-		uint16_t readPairPSW();
+		uint16_t readPairPSW() const;
 
 		void stackPush(uint16_t);
 		uint16_t stackPop();
-
-		auto tiedRegisters() const;
 
 		uint8_t currentInstruction;
 
@@ -74,7 +72,7 @@ class CPU {
 
 		uint8_t extraCycles {0};			// Extra cycles for when conditional branches do an action
 
-		uint16_t readImmediate();
+		uint16_t readImmediate() const;
 
 		// General opcode functions
 		void dcr(uint8_t&);

@@ -124,7 +124,7 @@ void CPU::clearMem() {
 	mem.clear();
 }
 // get size of memory
-size_t CPU::getMemSize() {
+size_t CPU::getMemSize() const {
 	return mem.size();
 }
 // Write a 16-bit value to the BC register pair
@@ -133,7 +133,7 @@ void CPU::writePairB(uint16_t data) {
 	C = data & 0x00FF;
 }
 // Read a 16-bit value from the BC register pair
-uint16_t CPU::readPairB() {
+uint16_t CPU::readPairB() const {
 	return (B << 8) | C;
 }
 // Write a 16-bit value to the DE register pair
@@ -142,7 +142,7 @@ void CPU::writePairD(uint16_t data) {
 	E = data & 0x00FF;
 }
 // Read a 16-bit value from the DE register pair
-uint16_t CPU::readPairD() {
+uint16_t CPU::readPairD() const {
 	return (D << 8) | E;
 }
 // Write a 16-bit value to the HL register pair
@@ -151,7 +151,7 @@ void CPU::writePairH(uint16_t data) {
 	L = data & 0x00FF;
 }
 // Read a 16-bit value from the HL register pair
-uint16_t CPU::readPairH() {
+uint16_t CPU::readPairH() const {
 	return (H << 8) | L;
 }
 // Write a 16 bit value to the AF register pair (Accumulator and then the flags)
@@ -169,7 +169,7 @@ void CPU::writePairPSW(uint16_t data) {
 	Carry = Flags & 0b00000001;
 }
 // Read a 16 bit value from the AF register pair
-uint16_t CPU::readPairPSW() {
+uint16_t CPU::readPairPSW() const {
 	return (A << 8) |
 		(Sign << 7) |
 		(Zero << 6) |
