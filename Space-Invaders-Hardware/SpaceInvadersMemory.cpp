@@ -37,3 +37,9 @@ void SpaceInvadersMemory::clear() {
 std::size_t SpaceInvadersMemory::size() const {
     return static_cast<std::size_t>(memorySize);
 }
+
+void SpaceInvadersMemory::writeRom(uint16_t addr, uint8_t data) {
+    if (addr < ramStart) {
+        rom[addr] = data;
+    }
+}

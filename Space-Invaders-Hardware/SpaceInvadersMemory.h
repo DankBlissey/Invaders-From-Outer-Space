@@ -11,13 +11,13 @@ class SpaceInvadersMemory : Memory {
         void clear() override;
         std::size_t size() const override;
 
-        void loadMem(uint16_t, uint8_t);
+        void writeRom(uint16_t, uint8_t);
     private:
         static constexpr uint16_t romSize {0x2000};
         static constexpr uint16_t ramSize {0x0400};
         static constexpr uint16_t vRamSize {0x1C00};
-        static constexpr uint16_t ramStart {static_cast<uint16_t>(romSize)};
-        static constexpr uint16_t vRamStart {static_cast<uint16_t>(ramStart + static_cast<uint16_t>(ramSize))};
+        static constexpr uint16_t ramStart {romSize};
+        static constexpr uint16_t vRamStart {static_cast<uint16_t>(ramStart + ramSize)};
         static constexpr uint16_t totalRamSize {static_cast<uint16_t>(ramSize + vRamSize)};
         static constexpr uint16_t memorySize {static_cast<uint16_t>(totalRamSize + romSize)};
         static constexpr uint16_t ramMask {static_cast<uint16_t>(memorySize - 1)};
