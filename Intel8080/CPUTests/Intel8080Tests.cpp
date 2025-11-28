@@ -5,16 +5,12 @@
 #include <bit>
 
 
-struct testCpuFixture {
+struct TestCpuFixture {
     std::unique_ptr<BasicMemory> memory {std::make_unique<BasicMemory>(BasicMemory())};
     std::unique_ptr<TestCPU> testCpu {std::make_unique<TestCPU>(TestCPU(*memory))};
-
-    testCpuFixture() {
-        
-    }
 };
 
-TEST_CASE_METHOD(testCpuFixture, "CMC Complement Carry", "[opcodes, carry]") {
+TEST_CASE_METHOD(TestCpuFixture, "CMC Complement Carry", "[opcodes, carry]") {
     testCpu->init();
     testCpu->setMem(0x000, 0x3F);
     testCpu->setMem(0x001, 0x3F);
@@ -31,7 +27,7 @@ TEST_CASE_METHOD(testCpuFixture, "CMC Complement Carry", "[opcodes, carry]") {
     REQUIRE(testCpu->getPc() == 2);
 }
 
-TEST_CASE_METHOD(testCpuFixture, "STC Set Carry", "[opcodes, carry]") {
+TEST_CASE_METHOD(TestCpuFixture, "STC Set Carry", "[opcodes, carry]") {
     testCpu->init();
     testCpu->setMem(0x000, 0x37);
     testCpu->setMem(0x001, 0x37);
@@ -50,7 +46,7 @@ TEST_CASE_METHOD(testCpuFixture, "STC Set Carry", "[opcodes, carry]") {
 
 // Zero, Sign, Parity, AuxCarry flags affected
 // 0-3 4 and C
-TEST_CASE_METHOD(testCpuFixture, "INR Increment Register or Memory (values)", "[opcodes, singleRegInstruction, values]") {
+TEST_CASE_METHOD(TestCpuFixture, "INR Increment Register or Memory (values)", "[opcodes, singleRegInstruction, values]") {
     testCpu->init();
     SECTION("INR on basic registers") {
         testCpu->setMem(0x000, 0x04); // INRB
@@ -132,7 +128,7 @@ TEST_CASE_METHOD(testCpuFixture, "INR Increment Register or Memory (values)", "[
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "INR Increment Register or Memory (flags)", "[opcodes, singleRegInstruction, flags]") {
+TEST_CASE_METHOD(TestCpuFixture, "INR Increment Register or Memory (flags)", "[opcodes, singleRegInstruction, flags]") {
     testCpu->init();
     testCpu->setMem(0x000, 0x04); // INRB
     SECTION("Case 1: -1 -> 0") {
@@ -176,7 +172,7 @@ TEST_CASE_METHOD(testCpuFixture, "INR Increment Register or Memory (flags)", "[o
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "DCR Decrement Register or Memory (values)", "[opcodes, singleRegInstructions, values]") {
+TEST_CASE_METHOD(TestCpuFixture, "DCR Decrement Register or Memory (values)", "[opcodes, singleRegInstructions, values]") {
     testCpu->init();
     SECTION("DCR on basic registers") {
         testCpu->setMem(0x000, 0x05); // DCRB
@@ -212,7 +208,7 @@ TEST_CASE_METHOD(testCpuFixture, "DCR Decrement Register or Memory (values)", "[
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "DCR Decrement Register or Memory (flags)", "[opcodes, singleRegInstructions, flags]") {
+TEST_CASE_METHOD(TestCpuFixture, "DCR Decrement Register or Memory (flags)", "[opcodes, singleRegInstructions, flags]") {
     testCpu->init();
     testCpu->setMem(0x000, 0x05); // DCRB
     SECTION("Case 1: 80 -> 79") {
@@ -245,7 +241,7 @@ TEST_CASE_METHOD(testCpuFixture, "DCR Decrement Register or Memory (flags)", "[o
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "CMA Complement Accumulator", "[opcodes, singleRegInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "CMA Complement Accumulator", "[opcodes, singleRegInstructions]") {
     testCpu->init();
     testCpu->setMem(0x000, 0x2F); // CMA
     SECTION("Case 1:") {
@@ -265,7 +261,7 @@ TEST_CASE_METHOD(testCpuFixture, "CMA Complement Accumulator", "[opcodes, single
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "DAA Decimal Adjust Accumulator", "[opcodes, singleRegInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "DAA Decimal Adjust Accumulator", "[opcodes, singleRegInstructions]") {
     testCpu->init();
     testCpu->setMem(0x000, 0x27);
     SECTION("Case: 1, Provided in 8080 manual") {
@@ -311,7 +307,7 @@ TEST_CASE_METHOD(testCpuFixture, "DAA Decimal Adjust Accumulator", "[opcodes, si
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "MOV Move data from one register or memory location to another", "[opcodes, singleRegInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "MOV Move data from one register or memory location to another", "[opcodes, singleRegInstructions]") {
     testCpu->init();
     SECTION("Copy value across all registers") {
         uint8_t testValue = 0x3D;
@@ -352,7 +348,7 @@ TEST_CASE_METHOD(testCpuFixture, "MOV Move data from one register or memory loca
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "STAX Store accumulator to memory", "[opcodes, singleRegInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "STAX Store accumulator to memory", "[opcodes, singleRegInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setB(0x3F);
@@ -366,7 +362,7 @@ TEST_CASE_METHOD(testCpuFixture, "STAX Store accumulator to memory", "[opcodes, 
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "LDAX Load accumulator with data from memory", "[opcodes, singleRegInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "LDAX Load accumulator with data from memory", "[opcodes, singleRegInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setD(0x93);
@@ -380,7 +376,7 @@ TEST_CASE_METHOD(testCpuFixture, "LDAX Load accumulator with data from memory", 
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ADD Add register or memory to accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ADD Add register or memory to accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example 1") {
         testCpu->setD(0x2E);
@@ -403,7 +399,7 @@ TEST_CASE_METHOD(testCpuFixture, "ADD Add register or memory to accumulator", "[
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ADC Add register or memory to accumulator with carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ADC Add register or memory to accumulator with carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setC(0x3D);
@@ -432,7 +428,7 @@ TEST_CASE_METHOD(testCpuFixture, "ADC Add register or memory to accumulator with
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "SUB Subtract register or memory from accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "SUB Subtract register or memory from accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setA(0x3E);
@@ -447,7 +443,7 @@ TEST_CASE_METHOD(testCpuFixture, "SUB Subtract register or memory from accumulat
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "SBB Subtract register or memory from accumulator with borrow", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "SBB Subtract register or memory from accumulator with borrow", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manaul example") {
         testCpu->setL(0x02);
@@ -464,7 +460,7 @@ TEST_CASE_METHOD(testCpuFixture, "SBB Subtract register or memory from accumulat
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ANA Logical and register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ANA Logical and register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setA(0xFC);
@@ -475,7 +471,7 @@ TEST_CASE_METHOD(testCpuFixture, "ANA Logical and register or memory with accumu
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "XRA Logical exclusive-or register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "XRA Logical exclusive-or register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example 1") {
         testCpu->setA(0x04);
@@ -503,7 +499,7 @@ TEST_CASE_METHOD(testCpuFixture, "XRA Logical exclusive-or register or memory wi
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ORA Logical or register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ORA Logical or register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setC(0x0F);
@@ -514,7 +510,7 @@ TEST_CASE_METHOD(testCpuFixture, "ORA Logical or register or memory with accumul
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "CMP Compare register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "CMP Compare register or memory with accumulator", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setE(0x05);
@@ -548,7 +544,7 @@ TEST_CASE_METHOD(testCpuFixture, "CMP Compare register or memory with accumulato
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "RLC Rotate accumulator left", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "RLC Rotate accumulator left", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setA(0xF2);
@@ -559,7 +555,7 @@ TEST_CASE_METHOD(testCpuFixture, "RLC Rotate accumulator left", "[opcodes, regOr
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "RRC Rotate accumulator right", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "RRC Rotate accumulator right", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setA(0xF2);
@@ -570,7 +566,7 @@ TEST_CASE_METHOD(testCpuFixture, "RRC Rotate accumulator right", "[opcodes, regO
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "RAL Rotate accumulator left through carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "RAL Rotate accumulator left through carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setA(0xB5);
@@ -582,7 +578,7 @@ TEST_CASE_METHOD(testCpuFixture, "RAL Rotate accumulator left through carry", "[
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "RAR Rotate accumulator right through carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "RAR Rotate accumulator right through carry", "[opcodes, regOrMemToAccumulatorInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setA(0x6A);
@@ -594,7 +590,7 @@ TEST_CASE_METHOD(testCpuFixture, "RAR Rotate accumulator right through carry", "
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "PUSH Push data onto stack", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "PUSH Push data onto stack", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         SECTION("Example 1") {
@@ -624,7 +620,7 @@ TEST_CASE_METHOD(testCpuFixture, "PUSH Push data onto stack", "[opcodes, regPair
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "POP Pop data off stack", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "POP Pop data off stack", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         SECTION("Example 1") {
@@ -653,7 +649,7 @@ TEST_CASE_METHOD(testCpuFixture, "POP Pop data off stack", "[opcodes, regPairIns
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "DAD Double add", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "DAD Double add", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setH(0xA1);
@@ -677,7 +673,7 @@ TEST_CASE_METHOD(testCpuFixture, "DAD Double add", "[opcodes, regPairInstruction
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "INX Increment register pair", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "INX Increment register pair", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         SECTION("Example 1") {
@@ -705,7 +701,7 @@ TEST_CASE_METHOD(testCpuFixture, "INX Increment register pair", "[opcodes, regPa
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "DCX Decrement register pair", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "DCX Decrement register pair", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setH(0x98);
@@ -717,7 +713,7 @@ TEST_CASE_METHOD(testCpuFixture, "DCX Decrement register pair", "[opcodes, regPa
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "XCHG Exchange registers", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "XCHG Exchange registers", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setD(0x33);
@@ -733,7 +729,7 @@ TEST_CASE_METHOD(testCpuFixture, "XCHG Exchange registers", "[opcodes, regPairIn
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "XTHL Exchange stack", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "XTHL Exchange stack", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setSp(0x10AD);
@@ -750,7 +746,7 @@ TEST_CASE_METHOD(testCpuFixture, "XTHL Exchange stack", "[opcodes, regPairInstru
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "SPHL Load sp from H and L", "[opcodes, regPairInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "SPHL Load sp from H and L", "[opcodes, regPairInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setH(0x50);
@@ -762,7 +758,7 @@ TEST_CASE_METHOD(testCpuFixture, "SPHL Load sp from H and L", "[opcodes, regPair
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "LXI Load 16 bit value into register pair", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "LXI Load 16 bit value into register pair", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         SECTION("Example 1") {
@@ -784,7 +780,7 @@ TEST_CASE_METHOD(testCpuFixture, "LXI Load 16 bit value into register pair", "[o
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "MVI Move immediate data", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "MVI Move immediate data", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x26); // MVI H
@@ -800,7 +796,7 @@ TEST_CASE_METHOD(testCpuFixture, "MVI Move immediate data", "[opcodes, immediate
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ADI Add immediate to accumulator", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ADI Add immediate to accumulator", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x3E); // MVI A
@@ -824,7 +820,7 @@ TEST_CASE_METHOD(testCpuFixture, "ADI Add immediate to accumulator", "[opcodes, 
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ACI Add immediate to accumulator with carry", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ACI Add immediate to accumulator with carry", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x3E); // MVI A
@@ -843,7 +839,7 @@ TEST_CASE_METHOD(testCpuFixture, "ACI Add immediate to accumulator with carry", 
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "SUI Subtract immediate from accumulator", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "SUI Subtract immediate from accumulator", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x3E); // MVI A
@@ -862,7 +858,7 @@ TEST_CASE_METHOD(testCpuFixture, "SUI Subtract immediate from accumulator", "[op
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "SBI Subtract immediate from accumulator with carry", "[opcodes, immmediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "SBI Subtract immediate from accumulator with carry", "[opcodes, immmediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0xAF); // XRA A
@@ -893,7 +889,7 @@ TEST_CASE_METHOD(testCpuFixture, "SBI Subtract immediate from accumulator with c
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ANI And immediate with accumulator", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ANI And immediate with accumulator", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x79); // MOV A,C
@@ -907,7 +903,7 @@ TEST_CASE_METHOD(testCpuFixture, "ANI And immediate with accumulator", "[opcodes
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "XRI Exclusive-Or immediate with accumulator") {
+TEST_CASE_METHOD(TestCpuFixture, "XRI Exclusive-Or immediate with accumulator") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0xEE); // XRI
@@ -918,7 +914,7 @@ TEST_CASE_METHOD(testCpuFixture, "XRI Exclusive-Or immediate with accumulator") 
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "ORI Or immediate with accumulator", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "ORI Or immediate with accumulator", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x79); // MOV A,C
@@ -931,7 +927,7 @@ TEST_CASE_METHOD(testCpuFixture, "ORI Or immediate with accumulator", "[opcodes,
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "CPI Compare immediate with accumulator", "[opcodes, immediateInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "CPI Compare immediate with accumulator", "[opcodes, immediateInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x3E); // MVI A
@@ -946,7 +942,7 @@ TEST_CASE_METHOD(testCpuFixture, "CPI Compare immediate with accumulator", "[opc
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "STA Store accumulator direct", "[opcodes, directAddrInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "STA Store accumulator direct", "[opcodes, directAddrInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x32); // STA
@@ -958,7 +954,7 @@ TEST_CASE_METHOD(testCpuFixture, "STA Store accumulator direct", "[opcodes, dire
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "LDA Load accumulator direct", "[opcodes, directAddrInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "LDA Load accumulator direct", "[opcodes, directAddrInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x000, 0x3A); // LDA
@@ -970,7 +966,7 @@ TEST_CASE_METHOD(testCpuFixture, "LDA Load accumulator direct", "[opcodes, direc
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "SHLD Store H and L direct", "[opcodes, directAddrInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "SHLD Store H and L direct", "[opcodes, directAddrInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setH(0xAE);
@@ -984,7 +980,7 @@ TEST_CASE_METHOD(testCpuFixture, "SHLD Store H and L direct", "[opcodes, directA
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "LHLD Load H and L direct", "[opcodes, directAddrInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "LHLD Load H and L direct", "[opcodes, directAddrInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setMem(0x25B, 0xFF);
@@ -998,7 +994,7 @@ TEST_CASE_METHOD(testCpuFixture, "LHLD Load H and L direct", "[opcodes, directAd
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "PCHL Load program counter", "[opcodes, jumpInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "PCHL Load program counter", "[opcodes, jumpInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         SECTION("Example 1") {
@@ -1013,7 +1009,7 @@ TEST_CASE_METHOD(testCpuFixture, "PCHL Load program counter", "[opcodes, jumpIns
     }
 }
 
-TEST_CASE_METHOD(testCpuFixture, "JMP JUMP", "[opcodes, jumpInstructions]") {
+TEST_CASE_METHOD(TestCpuFixture, "JMP JUMP", "[opcodes, jumpInstructions]") {
     testCpu->init();
     SECTION("Manual example") {
         testCpu->setA(0xFF);
