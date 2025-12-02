@@ -134,7 +134,7 @@ int main( int argc, char* args[]) {
         SDL_Log("Unable to load invaders.h1");
         return 1;
     }
-    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.g1", 0x8000)) {
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.g1", 0x0800)) {
         SDL_Log("Unable to load invaders.g1");
         return 1;
     }
@@ -154,17 +154,13 @@ int main( int argc, char* args[]) {
             if (e.type == SDL_EVENT_QUIT) {
                 quit = true;
             } else {
-                //handleInput(*spaceInvadersHardware, e);
+                handleInput(*spaceInvadersHardware, e);
             }
         }
-        //spaceInvadersHardware->frame();
-        for (int y = 0; y < screenHeight; ++y)
-            for (int x = 0; x < screenWidth; ++x)
-                spaceInvadersHardware->frameBuffer[y * screenWidth + x] = 0xFF000000 | ((x * 255 / screenWidth) << 16) | ((y * 255 / screenHeight) << 8);
-            
+        spaceInvadersHardware->frame();
         SDL_UpdateTexture(videoTexture, nullptr, spaceInvadersHardware->frameBuffer.data(), 256 * sizeof(std::uint32_t));
         SDL_RenderClear(renderer);
-        SDL_RenderTextureRotated(renderer, videoTexture, nullptr, nullptr, 90.0, nullptr, SDL_FLIP_NONE);
+        SDL_RenderTextureRotated(renderer, videoTexture, nullptr, nullptr, -90.0, nullptr, SDL_FLIP_NONE);
         SDL_RenderPresent(renderer);
     }
     close();

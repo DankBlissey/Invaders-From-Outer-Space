@@ -62,10 +62,8 @@ void CPU::stopInterrupt() {
 uint8_t CPU::cycle() {
 	extraCycles = 0;
 	if (interruptPending) {
-		// Use the interrupt opcode provided
-		currentInstruction = readMem(interruptVector);
-		// Execute the opcode
-		(this->*functptr[currentInstruction])();
+		// Execute the vector
+		(this->*functptr[interruptVector])();
 		// Reset the INTE flip flop
 		interruptPending = false;
 		INTE = false;
