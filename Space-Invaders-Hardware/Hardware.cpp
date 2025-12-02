@@ -9,3 +9,18 @@ Hardware::Hardware() {
     // In Port 3 gets the shifted value from the register
     intel8080.setInPort(3, [&](){ return shiftRegister.readShiftRegister(); });
 }
+
+void Hardware::frame() {
+    unsigned long long halfEndpoint {totalFrames * cyclesPerHalfFrame};
+    unsigned long long endpoint {totalFrames * cyclesPerFrame};
+    while (totalCycles < halfEndpoint) {
+        totalCycles += intel8080.cycle();
+    }
+    // insert frame rendering here as it allows for cpu init cycles to initialize vRam 
+    // but it is before the CPU actually starts changing things in vRam via the interrupt
+    intel8080.requestInterrupt(0xCF);
+    while(totalCycles < endpoint) {
+        totalCycles += intel8080.cycle();
+    }
+    intel8080.requestInterrupt(0xD7);
+}
