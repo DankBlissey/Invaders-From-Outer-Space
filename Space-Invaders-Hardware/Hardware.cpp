@@ -1,5 +1,18 @@
 #include "Hardware.h"
 
+constexpr std::array<std::array<uint32_t, 8>, 256> buildLookupTable() {
+    std::array<std::array<uint32_t, 8>, 256> table{};
+    for (int byte = 0; byte < 256; byte++) {
+        for (int i = 0; i < 8; i++) {
+            bool bit = (byte >> i) & 1;
+            table[byte][i] =  bit ? 0xFFFFFFFF : 0xFF000000;
+        }
+    }
+    return table;
+}
+
+constexpr std::array<std::array<std::uint32_t,8>,256> lookupTable {buildLookupTable()};
+
 // Initialize object with relevant output port functions
 Hardware::Hardware() {
     // Out Port 2 specifies the shift offset
@@ -10,6 +23,7 @@ Hardware::Hardware() {
     intel8080.setInPort(3, [&](){ return shiftRegister.readShiftRegister(); });
 }
 
+// Steps for one frame of execution
 void Hardware::frame() {
     unsigned long long halfEndpoint {totalFrames * cyclesPerHalfFrame};
     unsigned long long endpoint {totalFrames * cyclesPerFrame};
@@ -23,4 +37,16 @@ void Hardware::frame() {
         totalCycles += intel8080.cycle();
     }
     intel8080.requestInterrupt(0xD7);
+}
+
+// Update the frame buffer with the pixel data of vRam converted to argb8888
+void Hardware::updateFrameBuffer() {
+    int index {0};
+    for (uint8_t val : memory.getVram()) {
+        const auto& expanded = lookupTable[val];
+        for (std::uint32_t val : expanded) {
+            frameBuffer[index] = val;
+            index++;
+        }
+    }
 }
