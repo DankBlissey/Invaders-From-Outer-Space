@@ -1,6 +1,7 @@
 #include "../Intel8080/CPU.h"
 #include "SpaceInvadersMemory.h"
 #include "ShiftRegister.h"
+#include <string>
 
 // Class representing all the hardware for space invaders
 class Hardware {
@@ -11,6 +12,7 @@ class Hardware {
         uint8_t inputPort0();
         uint8_t inputPort1();
         uint8_t inputPort2();
+        bool loadROMFile(const std::string&, size_t = 0);
         std::array<std::uint32_t, 224*256> frameBuffer {};
         bool fire {}, left {}, right {}, credit {}, twoPlayerStart {}, onePlayerStart {}, 
         playerOneShot {}, playerOneLeft {}, playerOneRight {}, tilt {}, 

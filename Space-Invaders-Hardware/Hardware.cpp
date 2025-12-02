@@ -1,4 +1,6 @@
 #include "Hardware.h"
+#include <fstream>
+#include <iostream>
 
 constexpr std::array<std::array<uint32_t, 8>, 256> buildLookupTable() {
     std::array<std::array<uint32_t, 8>, 256> table{};
@@ -32,6 +34,34 @@ Hardware::Hardware() {
     intel8080.setInPort(2, [&](){ return inputPort2(); });
     // In Port 3 gets the shifted value from the register
     intel8080.setInPort(3, [&](){ return shiftRegister.readShiftRegister(); });
+}
+
+bool Hardware::loadROMFile(const std::string& fileName, size_t startAddress) {
+    std::ifstream romFile(fileName, std::ios::binary | std::ios::ate);
+	size_t memorySize = memory.size();
+	if(!romFile.is_open()) {
+		std::cerr << "Error: cannot open ROM file " << fileName << "\n";
+		return false;
+	}
+	std::streamsize size = romFile.tellg();
+	romFile.seekg(0, std::ios::beg);
+
+	if (startAddress + size > memorySize) {
+		std::cerr << "Error: ROM too large to fit in memory\n";
+		return false;
+	}
+
+	std::vector<uint8_t> buffer(size);
+	if (!romFile.read(reinterpret_cast<char*>(buffer.data()), size)) {
+		std::cerr << "Error: failed to read ROM data\n";
+		return false;
+	}
+
+	for (size_t i = 0; i < buffer.size(); i++) {
+		memory.writeRom(startAddress + static_cast<uint16_t>(i), buffer[i]);
+	}
+
+	return true;
 }
 
 // Steps for one frame of execution

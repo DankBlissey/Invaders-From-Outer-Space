@@ -52,6 +52,22 @@ int main( int argc, char* args[]) {
         SDL_Log("Unable to initialize program\n");
         return 1;
     }
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.h1")) {
+        SDL_Log("Unable to load invaders.h1");
+        return 1;
+    }
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.g1", 0x8000)) {
+        SDL_Log("Unable to load invaders.g1");
+        return 1;
+    }
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.f1", 0x1000)) {
+        SDL_Log("Unable to load invaders.f1");
+        return 1;
+    }
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.e1", 0x1800)) {
+        SDL_Log("Unable to load invaders.e1");
+        return 1;
+    }
     bool quit(false);
     SDL_Event e;
     SDL_zero(e);

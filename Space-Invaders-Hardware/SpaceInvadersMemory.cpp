@@ -35,7 +35,7 @@ void SpaceInvadersMemory::clear() {
 }
 // return the size of memory
 std::size_t SpaceInvadersMemory::size() const {
-    return static_cast<std::size_t>(memorySize);
+    return static_cast<std::size_t>(romSize);
 }
 
 void SpaceInvadersMemory::writeRom(uint16_t addr, uint8_t data) {

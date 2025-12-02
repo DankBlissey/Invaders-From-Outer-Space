@@ -13,7 +13,10 @@ CMakeUserPresets.json
 
 ExampleEmulator/
 CompareEmulators.cpp
-SpaceInvadersROM/
+*.e1
+*.f1
+*.g1
+*.h1
 
 # CLion
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
