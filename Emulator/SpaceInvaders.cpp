@@ -2,6 +2,8 @@
 #include <SDL3/SDL_main.h>
 #include "Hardware.h"
 #include <memory>
+#include "SDL3/SDL_events.h"
+#include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_pixels.h"
 #include "SDL3/SDL_render.h"
 
@@ -22,7 +24,7 @@ bool init() {
         SDL_Log( "SDL could not initialize! SDL error: %s\n", SDL_GetError());
         return false;
     }
-    if (window = SDL_CreateWindow("Space Invaders", screenWidth, screenHeight, 0); window == nullptr) {
+    if (window = SDL_CreateWindow("Space Invaders", screenHeight, screenWidth, 0); window == nullptr) {
         SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
         return false;
     }
@@ -44,6 +46,82 @@ void close() {
     SDL_DestroyRenderer(renderer);
     renderer = nullptr;
     SDL_Quit();
+}
+
+void handleInput(Hardware& hardware, SDL_Event& e) {
+    if (e.type == SDL_EVENT_KEY_DOWN) {
+        switch (e.key.key) {
+            case SDLK_A:
+                hardware.left = true;
+                hardware.playerOneLeft = true;
+                break;
+            case SDLK_D:
+                hardware.right = true;
+                hardware.playerOneRight = true;
+                break;
+            case SDLK_W:
+                hardware.fire = true;
+                hardware.playerOneShot = true;
+                break;
+            case SDLK_C:
+                hardware.credit = true;
+                break;
+            case SDLK_1:
+                hardware.onePlayerStart = true;
+                break;
+            case SDLK_2:
+                hardware.twoPlayerStart = true;
+                break;
+            case SDLK_LEFT:
+                hardware.playerTwoLeft = true;
+                break;
+            case SDLK_RIGHT:
+                hardware.playerTwoRight = true;
+                break;
+            case SDLK_UP:
+                hardware.playerTwoShot = true;
+                break;
+            case SDLK_T:
+                hardware.tilt = true;
+                break;
+        }
+    } else if (e.type == SDL_EVENT_KEY_UP) {
+        switch (e.key.key) {
+            case SDLK_A:
+                hardware.left = false;
+                hardware.playerOneLeft = false;
+                break;
+            case SDLK_D:
+                hardware.right = false;
+                hardware.playerOneRight = false;
+                break;
+            case SDLK_W:
+                hardware.fire = false;
+                hardware.playerOneShot = false;
+                break;
+            case SDLK_C:
+                hardware.credit = false;
+                break;
+            case SDLK_1:
+                hardware.onePlayerStart = false;
+                break;
+            case SDLK_2:
+                hardware.twoPlayerStart = false;
+                break;
+            case SDLK_LEFT:
+                hardware.playerTwoLeft = false;
+                break;
+            case SDLK_RIGHT:
+                hardware.playerTwoRight = false;
+                break;
+            case SDLK_UP:
+                hardware.playerTwoShot = false;
+                break;
+            case SDLK_T:
+                hardware.tilt = false;
+                break;
+        }
+    }
 }
 
 int main( int argc, char* args[]) {
@@ -75,10 +153,19 @@ int main( int argc, char* args[]) {
         while(SDL_PollEvent(&e) == true) {
             if (e.type == SDL_EVENT_QUIT) {
                 quit = true;
+            } else {
+                //handleInput(*spaceInvadersHardware, e);
             }
         }
-        // Do emulation
-        
+        //spaceInvadersHardware->frame();
+        for (int y = 0; y < screenHeight; ++y)
+            for (int x = 0; x < screenWidth; ++x)
+                spaceInvadersHardware->frameBuffer[y * screenWidth + x] = 0xFF000000 | ((x * 255 / screenWidth) << 16) | ((y * 255 / screenHeight) << 8);
+            
+        SDL_UpdateTexture(videoTexture, nullptr, spaceInvadersHardware->frameBuffer.data(), 256 * sizeof(std::uint32_t));
+        SDL_RenderClear(renderer);
+        SDL_RenderTextureRotated(renderer, videoTexture, nullptr, nullptr, 90.0, nullptr, SDL_FLIP_NONE);
+        SDL_RenderPresent(renderer);
     }
     close();
     return 0;
