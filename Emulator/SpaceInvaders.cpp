@@ -1,14 +1,21 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include "Hardware.h"
+#include "LTimer.h"
+#include <sstream>
 #include <memory>
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_pixels.h"
 #include "SDL3/SDL_render.h"
+#include <iostream>
 
 constexpr int screenWidth {256};
 constexpr int screenHeight {224};
+
+constexpr int screenFPS {60};
+
+constexpr std::uint64_t nsPerFrame = 1000000000 / screenFPS;
 
 constexpr int adjustedHeight {screenWidth * 4};
 constexpr int adjustedWidth {screenHeight * 3};
@@ -30,6 +37,10 @@ bool init() {
     }
     if (renderer = SDL_CreateRenderer(window, nullptr); renderer == nullptr) {
         SDL_Log("Renderer could not be created! SDL error: %s\n", SDL_GetError());
+        return false;
+    }
+    if (SDL_SetRenderVSync(renderer, 1) == false) {
+        SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
         return false;
     }
     if (videoTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, screenWidth, screenHeight); videoTexture == nullptr) {
@@ -149,7 +160,13 @@ int main( int argc, char* args[]) {
     bool quit(false);
     SDL_Event e;
     SDL_zero(e);
+    bool vsyncEnabled {true};
+    bool fpsCapEnabled {true};
+    LTimer capTimer;
+    std::uint64_t renderingNS {0};
+    std::stringstream timeText;
     while(quit == false) {
+        capTimer.start();
         while(SDL_PollEvent(&e) == true) {
             if (e.type == SDL_EVENT_QUIT) {
                 quit = true;
@@ -162,6 +179,12 @@ int main( int argc, char* args[]) {
         SDL_RenderClear(renderer);
         SDL_RenderTextureRotated(renderer, videoTexture, nullptr, nullptr, -90.0, nullptr, SDL_FLIP_NONE);
         SDL_RenderPresent(renderer);
+        renderingNS = capTimer.getTicksNS();
+        if (renderingNS < nsPerFrame) {
+            SDL_DelayNS(nsPerFrame - renderingNS);
+
+            renderingNS = capTimer.getTicksNS();
+        }
     }
     close();
     return 0;
