@@ -8,7 +8,6 @@
 #include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_pixels.h"
 #include "SDL3/SDL_render.h"
-#include <iostream>
 
 constexpr int screenWidth {256};
 constexpr int screenHeight {224};
