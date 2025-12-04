@@ -75,14 +75,17 @@ void handleInput(Hardware& hardware, SDL_Event& e) {
             case SDLK_A:
                 hardware.left = true;
                 hardware.playerOneLeft = true;
+                hardware.playerTwoLeft = true;
                 break;
             case SDLK_D:
                 hardware.right = true;
                 hardware.playerOneRight = true;
+                hardware.playerTwoRight = true;
                 break;
-            case SDLK_W:
+            case SDLK_SPACE:
                 hardware.fire = true;
                 hardware.playerOneShot = true;
+                hardware.playerTwoShot = true;
                 break;
             case SDLK_C:
                 hardware.credit = true;
@@ -93,15 +96,6 @@ void handleInput(Hardware& hardware, SDL_Event& e) {
             case SDLK_2:
                 hardware.twoPlayerStart = true;
                 break;
-            case SDLK_LEFT:
-                hardware.playerTwoLeft = true;
-                break;
-            case SDLK_RIGHT:
-                hardware.playerTwoRight = true;
-                break;
-            case SDLK_UP:
-                hardware.playerTwoShot = true;
-                break;
             case SDLK_T:
                 hardware.tilt = true;
                 break;
@@ -111,29 +105,23 @@ void handleInput(Hardware& hardware, SDL_Event& e) {
             case SDLK_A:
                 hardware.left = false;
                 hardware.playerOneLeft = false;
+                hardware.playerTwoLeft = false;
                 break;
             case SDLK_D:
                 hardware.right = false;
                 hardware.playerOneRight = false;
+                hardware.playerTwoRight = false;
                 break;
-            case SDLK_W:
+            case SDLK_SPACE:
                 hardware.fire = false;
                 hardware.playerOneShot = false;
+                hardware.playerTwoShot = false;
                 break;
             case SDLK_1:
                 hardware.onePlayerStart = false;
                 break;
             case SDLK_2:
                 hardware.twoPlayerStart = false;
-                break;
-            case SDLK_LEFT:
-                hardware.playerTwoLeft = false;
-                break;
-            case SDLK_RIGHT:
-                hardware.playerTwoRight = false;
-                break;
-            case SDLK_UP:
-                hardware.playerTwoShot = false;
                 break;
             case SDLK_T:
                 hardware.tilt = false;
@@ -149,19 +137,19 @@ int main( int argc, char* args[]) {
         SDL_Log("Unable to initialize program\n");
         return 1;
     }
-    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.h1")) {
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/9316b-0869_m739h.h1")) {
         SDL_Log("Unable to load invaders.h1");
         return 1;
     }
-    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.g1", 0x0800)) {
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/9316b-0856_m739g.g1", 0x0800)) {
         SDL_Log("Unable to load invaders.g1");
         return 1;
     }
-    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.f1", 0x1000)) {
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/9316b-0855_m739f.f1", 0x1000)) {
         SDL_Log("Unable to load invaders.f1");
         return 1;
     }
-    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/invaders.e1", 0x1800)) {
+    if (!spaceInvadersHardware->loadROMFile("SpaceInvadersROM/9316b-0854_m739e.e1", 0x1800)) {
         SDL_Log("Unable to load invaders.e1");
         return 1;
     }
