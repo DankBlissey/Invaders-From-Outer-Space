@@ -63,6 +63,8 @@ void close() {
     window = nullptr;
     SDL_DestroyRenderer(renderer);
     renderer = nullptr;
+    SDL_DestroyTexture(videoTexture);
+    videoTexture = nullptr;
     SDL_Quit();
 }
 
