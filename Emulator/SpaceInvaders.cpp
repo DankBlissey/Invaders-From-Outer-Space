@@ -34,7 +34,7 @@ bool init() {
         SDL_Log( "SDL could not initialize! SDL error: %s\n", SDL_GetError());
         return false;
     }
-    if (window = SDL_CreateWindow("Space Invaders", screenHeight, screenWidth, SDL_WINDOW_RESIZABLE); window == nullptr) {
+    if (window = SDL_CreateWindow("Space Invaders", 480, 640, SDL_WINDOW_RESIZABLE); window == nullptr) {
         SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
         return false;
     }
