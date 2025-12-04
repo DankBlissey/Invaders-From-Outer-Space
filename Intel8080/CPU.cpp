@@ -122,7 +122,7 @@ void CPU::clearMem() {
 	mem.clear();
 }
 // get size of memory
-size_t CPU::getMemSize() const {
+std::size_t CPU::getMemSize() const {
 	return mem.size();
 }
 // Write a 16-bit value to the BC register pair

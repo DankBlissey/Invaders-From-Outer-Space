@@ -35,9 +35,9 @@ void Hardware::setUpPorts() {
     intel8080.setInPort(3, [&](){ return shiftRegister.readShiftRegister(); });
 }
 
-bool Hardware::loadROMFile(const std::string& fileName, size_t startAddress) {
+bool Hardware::loadROMFile(const std::string& fileName, std::size_t startAddress) {
     std::ifstream romFile(fileName, std::ios::binary | std::ios::ate);
-	size_t memorySize = memory->size();
+	std::size_t memorySize = memory->size();
 	if(!romFile.is_open()) {
 		std::cerr << "Error: cannot open ROM file " << fileName << "\n";
 		return false;
@@ -56,7 +56,7 @@ bool Hardware::loadROMFile(const std::string& fileName, size_t startAddress) {
 		return false;
 	}
 
-	for (size_t i = 0; i < buffer.size(); i++) {
+	for (std::size_t i = 0; i < buffer.size(); i++) {
 		memory->writeRom(startAddress + static_cast<uint16_t>(i), buffer[i]);
 	}
 

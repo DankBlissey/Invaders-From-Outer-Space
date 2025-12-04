@@ -13,7 +13,7 @@ class Hardware {
         uint8_t inputPort0();
         uint8_t inputPort1();
         uint8_t inputPort2();
-        bool loadROMFile(const std::string&, size_t = 0);
+        bool loadROMFile(const std::string&, std::size_t = 0);
         bool getCredit();
         std::array<std::uint32_t, 224*256> frameBuffer {};
         bool fire {false}, left {false}, right {false}, credit {false}, twoPlayerStart {false}, onePlayerStart {false}, 

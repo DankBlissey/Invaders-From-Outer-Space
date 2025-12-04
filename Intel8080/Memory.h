@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <cstddef>
 using std::uint8_t;
 using std::uint16_t;
 

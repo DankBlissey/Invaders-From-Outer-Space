@@ -23,7 +23,7 @@ class CPU {
 		uint8_t readMem(uint16_t) const;
 		void writeMem(uint16_t, uint8_t);
 		void clearMem();
-		size_t getMemSize() const;
+		std::size_t getMemSize() const;
 
 		bool halted();
 

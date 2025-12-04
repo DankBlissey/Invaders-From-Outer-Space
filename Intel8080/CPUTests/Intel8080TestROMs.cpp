@@ -7,9 +7,9 @@
 #include "BasicMemory.h"
 using std::string;
 
-bool loadROM(CPU& cpu, const string& fileName, size_t startAddress = 0) {
+bool loadROM(CPU& cpu, const string& fileName, std::size_t startAddress = 0) {
 	std::ifstream romFile(fileName, std::ios::binary | std::ios::ate);
-	size_t memorySize = cpu.getMemSize();
+	std::size_t memorySize = cpu.getMemSize();
 	if(!romFile.is_open()) {
 		std::cerr << "Error: cannot open ROM file " << fileName << "\n";
 		return false;
@@ -28,7 +28,7 @@ bool loadROM(CPU& cpu, const string& fileName, size_t startAddress = 0) {
 		return false;
 	}
 
-	for (size_t i = 0; i < buffer.size(); i++) {
+	for (std::size_t i = 0; i < buffer.size(); i++) {
 		cpu.writeMem(startAddress + static_cast<uint16_t>(i), buffer[i]);
 	}
 
