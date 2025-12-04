@@ -5,7 +5,7 @@ It uses vcpkg for package management, SDL3 for rendering, and Catch2 for automat
 
 ![](Media/example.gif)
 
-## Instructions for how to run:
+## Build Instructions
 vcpkg is already included as a git submodule so all you need to do is:  
 
 - `git clone --recursive https://github.com/DankBlissey/Space-Invaders.git`  
