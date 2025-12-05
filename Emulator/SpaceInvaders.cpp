@@ -51,7 +51,7 @@ bool init() {
         return false;
     }
     if (SDL_SetTextureScaleMode(videoTexture, SDL_SCALEMODE_NEAREST) == false) {
-        SDL_Log("Could not enable nearest neighbour scaling SDL error: %s\n", SDL_GetError());
+        SDL_Log("Could not enable nearest neighbour scaling! SDL error: %s\n", SDL_GetError());
         return false;
     }
     return true;

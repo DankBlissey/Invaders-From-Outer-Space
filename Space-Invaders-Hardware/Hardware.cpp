@@ -13,7 +13,39 @@ constexpr std::array<std::array<uint32_t, 8>, 256> buildLookupTable() {
     return table;
 }
 
+// Red overlay from height 32-64 = 32 tall
+// Green big overlay from 184-240 (239) = 56 (55) tall
+
+// Small green overlay 17 (16) tall and starts 25 from left, ending 136 from left, 
+
+constexpr std::array<uint32_t, 224*256> buildColourOverlay() {
+    std::array<uint32_t, 224*256> table {};
+    for (int i = 0; i < 224*256; i++) {
+        table[i] = 0xFFFFFFFF;
+    }
+    for (int x = 191; x < 224; x++) {
+        for (int y = 0; y < 224; y++) {
+            table[y * 256 + x] = 0xFF000080;
+        }
+    }
+
+    for (int x = 17; x < 64; x++) {
+        for  (int y = 0; y < 224; y++) {
+            table[y * 256 + x] = 0xFF008000;
+        }
+    }
+
+    for (int x = 0; x < 16; x++) {
+        for (int y = 24; y < 136; y++) {
+            table[y * 256 + x] = 0xFF008000;
+        }
+    }
+    return table;
+}
+
 constexpr std::array<std::array<std::uint32_t,8>,256> lookupTable {buildLookupTable()};
+
+constexpr std::array<uint32_t, 224*256> colourOverlay {buildColourOverlay()};
 
 void Hardware::setUpPorts() {
     // Out Port 2 specifies the shift offset
@@ -88,7 +120,7 @@ void Hardware::updateFrameBuffer() {
     for (uint8_t val : memory->getVram()) {
         const auto& expanded = lookupTable[val];
         for (std::uint32_t val : expanded) {
-            frameBuffer[index] = val;
+            frameBuffer[index] = val & colourOverlay[index];
             index++;
         }
     }
