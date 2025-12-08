@@ -31,9 +31,9 @@ t = tilt (simulates the cabinet being tilted which results in a game over)
 esc = quit  
 
 ## State of project:
-Currently the emulator is running with basic colour, in 3:4 aspect ratio as per the cabinet CRT screen. It does not currently have audio capabilities.  
+Currently, the emulator is running well, in a dynamically resizable window with a background and colour overlay. It is, however, missing audio implementation.  
 ### Things to add:  
-- Visual effects: better colour overlays, crt scanlines, etc  
+- Visual effects: CRT scanlines, glow effect, etc  
 - Audio  
 
 Enjoy!
