@@ -3,7 +3,7 @@
 To build it, you will need CMake Version 3.26 or higher, as well as Ninja.  
 It uses vcpkg for package management, SDL3 for rendering, and Catch2 for automated testing  
 
-![](Media/example.gif)
+![](Media/invadersGifNew.gif)
 
 ## Build Instructions
 vcpkg is already included as a git submodule so all you need to do is:  
@@ -33,7 +33,7 @@ esc = quit
 ## State of project:
 Currently the emulator is running with basic colour, in 3:4 aspect ratio as per the cabinet CRT screen. It does not currently have audio capabilities.  
 ### Things to add:  
-- Visual effects: better colour overlays, a background, crt scanlines, etc  
+- Visual effects: better colour overlays, crt scanlines, etc  
 - Audio  
 
 Enjoy!
