@@ -7,7 +7,7 @@ constexpr std::array<std::array<uint32_t, 8>, 256> buildLookupTable() {
     for (int byte = 0; byte < 256; byte++) {
         for (int i = 0; i < 8; i++) {
             bool bit = (byte >> i) & 1;
-            table[byte][i] =  bit ? 0xFFFFFFFF : 0xFF000000;
+            table[byte][i] =  bit ? 0xFFFFFFD0 : 0x00000000;
         }
     }
     return table;
@@ -23,21 +23,21 @@ constexpr std::array<uint32_t, 224*256> buildColourOverlay() {
     for (int i = 0; i < 224*256; i++) {
         table[i] = 0xFFFFFFFF;
     }
-    for (int x = 191; x < 224; x++) {
+    for (int x = 192; x < 224; x++) {
         for (int y = 0; y < 224; y++) {
-            table[y * 256 + x] = 0xFF000080;
+            table[y * 256 + x] = 0xFFB53DFD;
         }
     }
 
     for (int x = 17; x < 64; x++) {
         for  (int y = 0; y < 224; y++) {
-            table[y * 256 + x] = 0xFF008000;
+            table[y * 256 + x] = 0xD042F56F;
         }
     }
 
     for (int x = 0; x < 16; x++) {
-        for (int y = 24; y < 136; y++) {
-            table[y * 256 + x] = 0xFF008000;
+        for (int y = 0; y < 136; y++) {
+            table[y * 256 + x] = 0xD042F56F;
         }
     }
     return table;

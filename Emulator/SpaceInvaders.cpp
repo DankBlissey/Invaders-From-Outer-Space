@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
 #include "Hardware.h"
 #include "LTimer.h"
 #include <sstream>
@@ -29,12 +30,16 @@ SDL_Renderer* renderer {nullptr};
 
 SDL_Texture* videoTexture {nullptr};
 
+SDL_Texture* backgroundTexture {nullptr};
+
+constexpr float imageScale {775.0 / 572.0};
+
 bool init() {
     if (SDL_Init(SDL_INIT_VIDEO) == false) {
         SDL_Log( "SDL could not initialize! SDL error: %s\n", SDL_GetError());
         return false;
     }
-    if (window = SDL_CreateWindow("Space Invaders", 480, 640, SDL_WINDOW_RESIZABLE); window == nullptr) {
+    if (window = SDL_CreateWindow("Space Invaders", 775, 572, SDL_WINDOW_RESIZABLE); window == nullptr) {
         SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
         return false;
     }
@@ -52,6 +57,10 @@ bool init() {
     }
     if (SDL_SetTextureScaleMode(videoTexture, SDL_SCALEMODE_NEAREST) == false) {
         SDL_Log("Could not enable nearest neighbour scaling! SDL error: %s\n", SDL_GetError());
+        return false;
+    }
+    if (backgroundTexture = IMG_LoadTexture(renderer, "invadersBitMap.bmp"); backgroundTexture == nullptr) {
+        SDL_Log("Background could not be loaded! %s\n", SDL_GetError());
         return false;
     }
     return true;
@@ -195,8 +204,15 @@ int main( int argc, char* args[]) {
         dstRect.h = targetH;
         dstRect.x = (renderW - targetW) * 0.5f;
         dstRect.y = (renderH - targetH) * 0.5f;
+
+        SDL_FRect imgRect;
+        imgRect.h = targetW;
+        imgRect.w = imgRect.h * imageScale;
+        imgRect.x = (renderW - imgRect.w) * 0.5f;
+        imgRect.y = (renderH - targetW) * 0.5f;
         SDL_UpdateTexture(videoTexture, nullptr, spaceInvadersHardware->frameBuffer.data(), 256 * sizeof(std::uint32_t));
         SDL_RenderClear(renderer);
+        SDL_RenderTexture(renderer, backgroundTexture, nullptr, &imgRect);
         SDL_RenderTextureRotated(renderer, videoTexture, nullptr, &dstRect, -90.0, nullptr, SDL_FLIP_NONE);
         SDL_RenderPresent(renderer);
         renderingNS = capTimer.getTicksNS();

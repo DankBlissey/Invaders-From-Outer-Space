@@ -18,6 +18,8 @@ CompareEmulators.cpp
 *.g1
 *.h1
 
+invaders.png
+
 # CLion
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
