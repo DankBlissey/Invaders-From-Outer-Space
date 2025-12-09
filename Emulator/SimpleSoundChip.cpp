@@ -9,25 +9,17 @@ static bool initializeSound(const char* fname, Sound* sound, SDL_AudioDeviceID a
         return false;
     }
 
-    sound->stream = SDL_CreateAudioStream(&spec, NULL);
+    sound->stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, NULL, NULL);
     if (!sound->stream) {
-        SDL_Log("Couldn't create audio stream! %s\n", SDL_GetError());
+        SDL_Log("Couldn't open audio stream for %s: &s\n", fname, SDL_GetError());
         return false;
     }
-    if (SDL_BindAudioStream(audio_device, sound->stream)) {
-        SDL_Log("Failed to bind '%s' stream to device! %s\n", fname, SDL_GetError());
-        return false;
-    }
+    SDL_ResumeAudioDevice(SDL_GetAudioStreamDevice(sound->stream));
     return true;
 }
 
 bool SimpleSoundChip::init() {
-    audioDevice = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
-    if (audioDevice == 0) {
-        SDL_Log("Could not open audio device! %s\n", SDL_GetError());
-        return false;
-    }
-    return initializeSound("Audio/0.wav", &ufoSound, audioDevice) && 
+    return initializeSound("Audio/0.wav", &ufoSound, audioDevice) &&
         initializeSound("Audio/1.wav", &shotSound, audioDevice) &&
         initializeSound("Audio/2.wav", &playerDieSound, audioDevice) &&
         initializeSound("Audio/3.wav", &invaderDieSound, audioDevice) &&
@@ -40,7 +32,16 @@ bool SimpleSoundChip::init() {
 }
 
 void SimpleSoundChip::playSound(Sound& sound) {
-    SDL_PutAudioStreamData(sound.stream, sound.wav_data, sound.wav_data_len);
+    if (!sound.played) {
+        SDL_PutAudioStreamData(sound.stream, sound.wav_data, sound.wav_data_len);
+        sound.played = true;
+    }
+}
+
+void SimpleSoundChip::playRepeatingSound(Sound& sound) {
+    if (SDL_GetAudioStreamQueued(sound.stream) < ((int) sound.wav_data_len)) {
+        SDL_PutAudioStreamData(sound.stream, sound.wav_data, sound.wav_data_len);
+    }
 }
 
 void SimpleSoundChip::port3(uint8_t soundData) {
@@ -48,19 +49,31 @@ void SimpleSoundChip::port3(uint8_t soundData) {
         return;
     }
     if ((soundData & 0b00000001) != 0) {
-        playSound(ufoSound);
+        playRepeatingSound(ufoSound);
     }
     if ((soundData & 0b00000010) != 0) {
         playSound(shotSound);
     }
+    else {
+        shotSound.played = false;
+    }
     if ((soundData & 0b00000100) != 0) {
         playSound(playerDieSound);
+    }
+    else {
+        playerDieSound.played = false;
     }
     if ((soundData & 0b00001000) != 0) {
         playSound(invaderDieSound);
     }
+    else {
+        invaderDieSound.played = false;
+    }
     if ((soundData & 0b00010000) != 0) {
         playSound(extraLifeSound);
+    }
+    else {
+        extraLifeSound.played = false;
     }
 }
 
@@ -68,20 +81,36 @@ void SimpleSoundChip::port5(uint8_t soundData) {
     if (!soundEnabled) {
         return;
     }
+
     if ((soundData & 0b00000001) != 0) {
         playSound(fleetMovement1Sound);
+    }
+    else {
+        fleetMovement1Sound.played = false;
     }
     if ((soundData & 0b00000010) != 0) {
         playSound(fleetMovement2Sound);
     }
+    else {
+        fleetMovement2Sound.played = false;
+    }
     if ((soundData & 0b00000100) != 0) {
         playSound(fleetMovement3Sound);
+    }
+    else {
+        fleetMovement3Sound.played = false;
     }
     if ((soundData & 0b00001000) != 0) {
         playSound(fleetMovement4Sound);
     }
+    else {
+        fleetMovement4Sound.played = false;
+    }
     if ((soundData & 0b00010000) != 0) {
         playSound(ufoHitSound);
+    }
+    else {
+        ufoHitSound.played = false;
     }
 }
 

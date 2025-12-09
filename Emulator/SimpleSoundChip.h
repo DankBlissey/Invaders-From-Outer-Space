@@ -6,6 +6,7 @@ typedef struct Sound {
     Uint8 *wav_data;
     Uint32 wav_data_len;
     SDL_AudioStream *stream;
+    bool played{ false };
 } Sound;
 
 class SimpleSoundChip : public SoundChip {
@@ -16,6 +17,7 @@ class SimpleSoundChip : public SoundChip {
         void port5(uint8_t);
 
         void playSound(Sound&);
+        void playRepeatingSound(Sound&);
         bool soundEnabled {false};
     private:
         SDL_AudioDeviceID audioDevice {0};
