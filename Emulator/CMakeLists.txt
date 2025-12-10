@@ -11,8 +11,8 @@ file(COPY ${CMAKE_SOURCE_DIR}/Media/invadersBitMapDark.bmp
 file(COPY ${CMAKE_SOURCE_DIR}/Audio
      DESTINATION ${CMAKE_BINARY_DIR}/Emulator)
 
-add_executable(SpaceInvaders SpaceInvaders.cpp LTimer.h LTimer.cpp SimpleSoundChip.h SimpleSoundChip.cpp)
+add_executable(InvadersFromOuterSpace SpaceInvaders.cpp LTimer.h LTimer.cpp SimpleSoundChip.h SimpleSoundChip.cpp)
 
-set_property(TARGET SpaceInvaders PROPERTY CXX_STANDARD 23)
+set_property(TARGET InvadersFromOuterSpace PROPERTY CXX_STANDARD 23)
 
-target_link_libraries(SpaceInvaders PRIVATE SDL3::SDL3 SDL3_image::SDL3_image Space-Invaders-Hardware)
+target_link_libraries(InvadersFromOuterSpace PRIVATE SDL3::SDL3 SDL3_image::SDL3_image Space-Invaders-Hardware)

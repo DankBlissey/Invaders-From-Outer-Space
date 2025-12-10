@@ -21,7 +21,7 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project ("SpaceInvaders")
+project ("InvadersFromOuterSpace")
 
 include(CTest)
 enable_testing()
