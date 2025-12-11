@@ -7,7 +7,7 @@ It features an accurate, cycle-counting, Intel 8080 CPU emulator
 
 ## Beta Version 1.0.0 is here!  
 You can find it in [Releases](https://github.com/DankBlissey/Invaders-From-Outer-Space/releases). It includes zip files for Windows and Linux binaries.  
-#### The Windows version requires an x64 Visual C++ Redistributable which covers Visual Studio 2022. If in doubt, just get the most recent one which can be downloaded here: https://aka.ms/vc14/vc_redist.x64.exe  
+#### The Windows version requires a Visual C++ x64 Redistributable that covers Visual Studio 2022. If in doubt, just get the most recent one which can be downloaded here: https://aka.ms/vc14/vc_redist.x64.exe  
 ## Install instructions  
 ### Disclaimer! The ROM and audio files are not included within the project as they are copyrighted material. You will have to source these files yourself and you do so at your own risk.  
 - Extract the contents of the zip file
@@ -38,14 +38,18 @@ Just run the .exe file to play!
 #### Other buildable executables include `Intel8080TestROMs.exe` which is a program to run various CPU test ROMs to verify CPU accurate behaviour and `tests.exe` which are automated tests for the CPU opcodes written using the catch2 library.  
 
 ## Controls:
-C = add credit  
-1 = start in one-player mode  
-2 = start in two-player mode  
-a = left  
-d = right  
-space = fire  
-t = tilt (simulates the cabinet being tilted, which results in a game over)  
-esc = quit  
+| Key | Action |
+| --- | ------ |
+| C | Add Credit |
+| 1 | Start in one-player mode |
+| 2 | Start in two-player mode |
+| A | Move Left |
+| D | Move Right |
+| SPACE | Fire Weapon |
+| T | Tilt |
+| ESC | Quit |
+
+(Tilt simulates the cabinet being tilted which results in a unique game over screen)
 
 ## State of project:
 Currently, the emulator is running well, in a dynamically resizable window with a background and colour overlay, and with audio.  
