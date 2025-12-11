@@ -7,6 +7,7 @@ It features an accurate, cycle-counting, Intel 8080 CPU emulator
 
 ## Beta Version 1.0.0 is here!  
 You can find it in [Releases](https://github.com/DankBlissey/Invaders-From-Outer-Space/releases). It includes zip files for Windows and Linux binaries.  
+#### The Windows version requires an x64 Visual C++ Redistributable which covers Visual Studio 2022. If in doubt, just get the most recent one which can be downloaded here: https://aka.ms/vc14/vc_redist.x64.exe  
 ## Install instructions  
 ### Disclaimer! The ROM and audio files are not included within the project as they are copyrighted material. You will have to source these files yourself and you do so at your own risk.  
 - Extract the contents of the zip file
